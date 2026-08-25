@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ATS_CV_Generator.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ATS_CV_Generator.Models
 {
     public class ApplicationUser : IdentityUser
     {
         //IdentityUser already includes main user data
+        [Required(ErrorMessage = "Please enter your full name.")]
         public string? FullName { get; set; }
         public string? GitHubUrl { get; set; }
         public string? LinkedInUrl { get; set; }
