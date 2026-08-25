@@ -19,14 +19,14 @@
 
                     <div class="mb-3 position-relative">
                         <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
-                        <input asp-for="Email" class="form-control input-with-icon" type="email" />
+                        <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email"/>
                         <i class="fa-regular fa-envelope custom-input-icon"></i>
                         <span asp-validation-for="Email" class="field-validation-error"></span>
                     </div>
 
-                    <div class="mb-3 position-relative">
+                    <div class="mb-3 position-relative" style="padding-bottom:5px;">
                         <label asp-for="Password" class="form-label" style="color: var(--text-secondary);">Password</label>
-                        <input asp-for="Password" class="form-control input-with-icon" type="password" />
+                        <input asp-for="Password" class="form-control input-with-icon" type="password" placeholder="Enter your password" />
                         <i class="fa-solid fa-lock custom-input-icon"></i>
                         <span class="password-toggle" id="togglePassword">
                             <i class="fa-regular fa-eye"></i>
