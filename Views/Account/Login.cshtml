@@ -1,5 +1,116 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model ATS_CV_Generator.Models.LoginViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <h1 class="mb-4 text-center" style="color: var(--text-primary); font-weight:900;">
+                ATS-Friendly CV Generator
+            </h1>
+        </div>
+    </div>
+
+    <div class="page-columns">
+        <div class="form-col" style="margin-top:50px;">
+            <div class="inputs-card">
+                <h2 class="mb-4" style="color: var(--text-primary); text-align: center; font-weight:900;">Welcome Back!</h2>
+                <h6 class="mb-4" style="color: var(--text-primary); text-align: center; font-family:'Inter'; font-weight:300;">Sign in to generate your CV</h6>
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="color: var(--error);"></div>
+
+                    <div class="mb-3 position-relative">
+                        <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
+                        <input asp-for="Email" class="form-control input-with-icon" type="email" />
+                        <i class="fa-regular fa-envelope custom-input-icon"></i>
+                        <span asp-validation-for="Email" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="mb-3 position-relative">
+                        <label asp-for="Password" class="form-label" style="color: var(--text-secondary);">Password</label>
+                        <input asp-for="Password" class="form-control input-with-icon" type="password" />
+                        <i class="fa-solid fa-lock custom-input-icon"></i>
+                        <span class="password-toggle" id="togglePassword">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                        <span asp-validation-for="Password" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <input asp-for="RememberMe" class="modern-checkbox" type="checkbox" />
+                        <label asp-for="RememberMe" style="color: var(--text-secondary); cursor: pointer;">Remember Me</label>
+                        <span asp-validation-for="RememberMe" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="mt-5 d-flex justify-content-center">
+                        <button id="animatedSaveBtn" type="submit" class="btn btn-animate w-100 py-2" data-text="Log In"></button>
+                    </div>
+                </form>
+            </div>
+            <h6 class="mb-4 developed-by" style="color: var(--text-primary); text-align: center; font-family:'Inter';">
+                Developed By: <span style="color: var(--secondary-teal)">Mazen Thobian</span>
+            </h6>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Sign Up Button Animations
+        $(document).ready(function() {
+            $("#animatedSaveBtn").on("click", function(e) {
+                e.preventDefault();
+
+                var $btn = $(this);
+                var $form = $btn.closest("form");
+
+                // Wake up ASP.NET validation just in case
+                $form.removeData("validator").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse($form);
+
+                // Check if the form is valid
+                if (!$form.valid()) {
+                    // Trigger the Red 'X'
+                    $btn.addClass("error-state");
+
+                    setTimeout(function() {
+                        $btn.removeClass("error-state");
+                    }, 2000);
+
+                    return; // Stop animation
+                }
+
+                // If valid, run the success animation
+                $btn.addClass("onclic");
+
+                setTimeout(function() {
+                    $btn.removeClass("onclic").addClass("validate");
+
+                    setTimeout(function() {
+                        $btn.removeClass("validate");
+                        $form.submit(); // Submit to Register method
+                    }, 1250);
+                }, 2000);
+            });
+        });
+
+        // Password Toggle "Eye Icon"
+        $(document).ready(function() {
+            $("#togglePassword").on("click", function() {
+                var $input = $("#Password");
+                var $icon = $(this).find("i");
+
+                if ($input.attr("type") === "password") {
+                    // Show password and change icon to 'slash'
+                    $input.attr("type", "text");
+                    $icon.removeClass("fa-eye").addClass("fa-eye-slash");
+                } else {
+                    // Hide password and change icon back to 'eye'
+                    $input.attr("type", "password");
+                    $icon.removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            });
+        });
+    </script>
 }

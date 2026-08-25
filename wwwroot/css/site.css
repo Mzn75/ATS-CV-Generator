@@ -124,6 +124,27 @@ h1 {
         color: var(--text-primary)
     }
 
+.input-with-icon {
+    padding-left: 45px !important;
+}
+.custom-input-icon {
+    position: absolute;
+    left: 1rem;
+    margin-top: -32px;
+    z-index: 1;
+    color: #38546d;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.form-control:hover + .custom-input-icon {
+    color: var(--secondary-teal, #14a39a);
+}
+
+.form-control:focus + .custom-input-icon {
+    color: var(--secondary-teal, #14a39a);
+}
+
 /* Modern Buttons */
 .btn-modern {
     border-radius: var(--border-radius-md);
@@ -197,7 +218,7 @@ h1 {
     }
 
     .btn-animate:after {
-        content: "Sign Up";
+        content: attr(data-text);
     }
 
     .btn-animate.onclic {
@@ -300,6 +321,39 @@ input[type="password"]::-ms-clear {
     box-sizing: border-box;
     container-type: inline-size;
 }
+
+.modern-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #38546d; /* Matches your divider line */
+    border-radius: 6px;
+    background-color: var(--surface-dark); /* Keeps the inside dark */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+}
+
+    /* 2. Adds a glow/color change when hovering */
+    .modern-checkbox:hover {
+        border-color: var(--secondary-teal, #14a39a);
+    }
+
+    /* 3. The exact styling when the user clicks it (Checked State) */
+    .modern-checkbox:checked {
+        background-color: var(--secondary-teal, #14a39a);
+        border-color: var(--secondary-teal, #14a39a);
+        /* A bulletproof, inline SVG checkmark - no icons or font files needed */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+        background-size: 14px;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 
 /* ==================== Small-screen adjustments ==================== */
 @media (max-width: 576px) {
