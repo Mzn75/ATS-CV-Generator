@@ -1,17 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+
 :root {
+    /* Core Palette */
     --primary-navy: #1C3B57;
     --navy-hover: #142A3F;
     --secondary-teal: #2A9D8F;
     --accent-coral: #E76F51;
-    --page-bg: #F8F9FB;
-    --surface-white: #FFFFFF;
-    --text-primary: #1A1D23;
-    --text-secondary: #5C6470;
-    --success: #2E7D32;
+    --coral-hover: #D65A3D;
+    --page-bg: #0B111A;
+    --surface-dark: #121C29;
+    --text-primary: #F8F9FB;
+    --text-secondary: #94A3B8;
     --error: #D64545;
+    --success: #2E7D32;
+    /* Modern UI Variables */
+    --border-radius-lg: 16px;
+    --border-radius-md: 10px;
+    --shadow-calm: 0 12px 32px rgba(0, 0, 0, 0.4);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
     background-color: var(--page-bg);
     color: var(--text-primary);
+    font-family: 'Sora', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Premium Card Design */
+.cv-card {
+    background: var(--surface-dark);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-calm);
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition-smooth);
+}
+
+/* Form Inputs */
+.form-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1.25rem;
+    color: var(--text-primary);
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: var(--transition-smooth);
+    box-shadow: none;
+}
+    .form-control::placeholder {
+        color: #475569;
+    }
+
+    .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        border-color: var(--secondary-teal);
+        box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.15);
+        outline: none;
+        color: var(--text-primary)
+    }
+
+/* Modern Buttons */
+.btn-modern {
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-smooth);
+    letter-spacing: 0.3px;
+    border: none;
+}
+
+.btn-primary-navy {
+    background-color: var(--primary-navy);
+    color: var(--surface-white);
+}
+
+    .btn-primary-navy:hover {
+        background-color: var(--navy-hover);
+        transform: translateY(-1px);
+        color: var(--surface-white);
+    }
+
+.btn-accent-coral {
+    background-color: var(--accent-coral);
+    color: var(--surface-white);
+}
+
+    .btn-accent-coral:hover {
+        background-color: var(--coral-hover);
+        transform: translateY(-1px);
+        color: var(--surface-white);
+    }
+
+/* Custom Red Error Text under inputs */
+.field-validation-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 5px;
+    display: block;
+}
+
+
+/* Animated Button CSS */
+.btn-animate {
+    width: 130px;
+    height: 40px;
+    border-radius: var(--border-radius-lg);
+    background: transparent;
+    border: 2px solid var(--secondary-teal);
+    color: var(--secondary-teal);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+    .btn-animate:hover {
+        color: var(--text-primary);
+        background: var(--secondary-teal);
+    }
+
+    .btn-animate:active {
+        letter-spacing: 2px;
+    }
+
+    .btn-animate:after {
+        content: "Sign Up";
+    }
+
+    .btn-animate.onclic {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        border-width: 3px !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        border-left-color: var(--secondary-teal) !important;
+        border-radius: 50% !important;
+        background: transparent !important;
+        animation: rotating 2s 0.25s linear infinite;
+    }
+
+        .btn-animate.onclic:after {
+            content: "" !important;
+        }
+
+        .btn-animate.onclic:hover {
+            color: var(--secondary-teal);
+            background: transparent;
+        }
+
+    .btn-animate.validate {
+        font-size: 13px;
+        color: var(--text-primary);
+        background: var(--secondary-teal);
+        width: 130px;
+    }
+
+        .btn-animate.validate:after {
+            font-family: "FontAwesome";
+            content: "\f00c"; /* FontAwesome checkmark Unicode */
+            font-weight: 900 !important;
+        }
+
+/* Button Error State (Red with X icon) */
+.btn-animate.error-state {
+    width: 130px !important;
+    color: var(--text-primary) !important;
+    background: var(--error) !important;
+    border-color: var(--error) !important;
+}
+
+    .btn-animate.error-state:after {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900 !important;
+        content: "\f00d" !important; /* FontAwesome 'X' icon */
+    }
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+}
+
+.password-toggle {
+    float: right;
+    margin-right: 15px;
+    margin-top: -35px; /* Pulls the icon up into the input box */
+    position: relative;
+    z-index: 10; /* Keeps it clickable */
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+    .password-toggle:hover {
+        color: var(--secondary-teal); /* Highlights in your teal color */
+    }
+
+.section-title {
+    color: var(--primary-navy);
+    font-weight: 700;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
