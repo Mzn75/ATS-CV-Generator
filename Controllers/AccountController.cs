@@ -71,7 +71,7 @@ namespace ATS_CV_Generator.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Dashboard", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
