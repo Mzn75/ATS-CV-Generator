@@ -251,13 +251,5 @@ input[type="password"]::-ms-clear {
     padding: 10px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     justify-content:center;
-}
-
-/* The actual image inside the frame */
-.preview-image {
-    max-width: 100%;
     width:auto;
-    height: auto;
-    border-radius: calc(var(--border-radius-lg) - 5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
