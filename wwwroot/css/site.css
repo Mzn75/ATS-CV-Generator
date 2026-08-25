@@ -355,6 +355,187 @@ input[type="password"]::-ms-clear {
         background-repeat: no-repeat;
     }
 
+/* Main Layout Container */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* Header Styling */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.dashboard-title {
+    color: var(--text-primary, #ffffff);
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.dashboard-subtitle {
+    color: var(--text-secondary, #bdbecb);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+/* 
+   THE RESPONSIVE MAGIC
+   This single line replaces all Bootstrap row/col logic 
+*/
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+/* The Main Card Container */
+.dashboard-card {
+    background-color: var(--surface-dark, #16171d);
+    border: 1px solid #38546d;
+    border-radius: 12px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    text-decoration: none; /* Removes the ugly blue link underline */
+}
+
+    /* Hover Physics: Floats up and glows teal */
+    .dashboard-card:hover {
+        border-color: var(--secondary-teal, #14a39a);
+        box-shadow: 0 10px 30px -15px rgba(20, 163, 154, 0.4);
+        transform: translateY(-5px);
+    }
+
+/* The Circle Around the Icon */
+.card-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(56, 84, 109, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+/* Icon Circle Hover State */
+.dashboard-card:hover .card-icon-wrapper {
+    background: rgba(20, 163, 154, 0.15);
+}
+
+/* The FontAwesome Icon */
+.card-icon {
+    font-size: 24px;
+    color: #bdbecb;
+    transition: all 0.3s ease;
+}
+
+/* Icon Hover State */
+.dashboard-card:hover .card-icon {
+    color: var(--secondary-teal, #14a39a);
+}
+
+/* Typography inside the card */
+.card-title {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.card-text {
+    color: #bdbecb;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Custom styling for the Draft Badge */
+.draft-badge {
+    background-color: transparent;
+    border: 1px solid #38546d;
+    color: #bdbecb;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-top: 20px;
+}
+
+/* The Top Navigation Bar */
+.dashboard-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 25px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--secondary-teal); /* Matches your card borders */
+}
+
+/* User Greeting Styling */
+.user-greeting {
+    color: #bdbecb;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* The Logout Button */
+.logout-btn {
+    background: transparent;
+    border: 1px solid #38546d;
+    color: #bdbecb;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    /* Logout Hover Physics: Glows red to indicate an exit action */
+    .logout-btn:hover {
+        border-color: #ff4757;
+        color: #ff4757;
+        background: rgba(255, 71, 87, 0.05);
+        box-shadow: 0 0 15px rgba(255, 71, 87, 0.15);
+        transform: translateY(-2px);
+    }
+
+.modern-mobile-btn {
+    background-color: transparent;
+    border: 1px solid var(--secondary-teal, #14a39a);
+    color: var(--secondary-teal, #14a39a);
+    border-radius: 8px;
+    padding: 12px 20px;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    cursor: pointer;
+}
+
+    .modern-mobile-btn:hover,
+    .modern-mobile-btn:active {
+        background-color: var(--secondary-teal, #14a39a);
+        color: #ffffff;
+        box-shadow: 0 5px 15px rgba(20, 163, 154, 0.3);
+    }
 /* ==================== Small-screen adjustments ==================== */
 @media (max-width: 576px) {
     .inputs-card {

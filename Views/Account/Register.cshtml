@@ -11,15 +11,12 @@
 
     <div class="page-columns">
 
-        <div class="preview-col">
-            <div class="preview-img-card">
-                <partial name="_CvPreviewCard" />
-            </div>
-        </div>
-
-        <div class="page-divider d-none d-lg-block"></div>
-
         <div class="form-col">
+            <div class="d-lg-none mb-4 text-center" style="margin-top: 30px;">
+                <button type="button" class="modern-mobile-btn" data-bs-toggle="modal" data-bs-target="#mobilePreviewModal">
+                    <i class="fa-regular fa-eye me-2"></i> Preview CV Template
+                </button>
+            </div>
             <h5 class="mb-4 form-col-tagline" style="color: var(--text-primary); text-align: center; font-family:'Inter';">
                 Generate Yours Now, For Free!
             </h5>
@@ -75,7 +72,32 @@
                 Developed By: <span style="color: var(--secondary-teal)">Mazen Thobian</span>
             </h6>
         </div>
+        <div class="page-divider col-lg-2 d-none d-lg-flex"></div>
+        <div class="preview-col col-lg-5 d-none d-lg-block">
+            <div class="preview-img-card">
+                <partial name="_CvPreviewCard" />
+            </div>
+        </div>
+    </div>
+    <!-- MOBILE PREVIEW MODAL -->
+    <div class="modal fade" id="mobilePreviewModal" tabindex="-1" aria-hidden="true">
+        <!-- modal-dialog-scrollable makes sure they can scroll if the CV is really tall -->
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="background-color: var(--surface-dark); border: 1px solid #38546d;">
 
+                <div class="modal-header" style="border-bottom: 1px solid #38546d;">
+                    <h5 class="modal-title" style="color: #ffffff; font-family: 'Montserrat', sans-serif;">CV Preview</h5>
+                    <!-- The close button -->
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- We just reuse your exact same partial view! -->
+                    <partial name="_CvPreviewCard" />
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
