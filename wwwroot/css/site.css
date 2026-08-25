@@ -10,6 +10,7 @@
     --coral-hover: #D65A3D;
     --page-bg: #0B111A;
     --surface-dark: #121C29;
+    --surface-white: #FFFFFF;
     --text-primary: #F8F9FB;
     --text-secondary: #94A3B8;
     --error: #D64545;
@@ -28,6 +29,47 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* ==================== Responsive two-column layout ==================== */
+.page-columns {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.preview-col {
+    flex: 1 1 460px;
+    max-width: 620px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-col {
+    flex: 1 1 380px;
+    max-width: 480px;
+}
+
+.form-col-tagline,
+.developed-by {
+    margin-top: 50px;
+}
+
+.page-divider {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--secondary-teal);
+    opacity: 0.35;
+    flex: 0 0 auto;
+}
+
+h1 {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+}
+
 /* Premium Card Design */
 .inputs-card {
     background: var(--surface-dark);
@@ -38,6 +80,7 @@ body {
     position: relative;
     z-index: 1;
 }
+
     .inputs-card::before {
         content: "";
         position: absolute;
@@ -68,6 +111,7 @@ body {
     transition: var(--transition-smooth);
     box-shadow: none;
 }
+
     .form-control::placeholder {
         color: #475569;
     }
@@ -190,19 +234,19 @@ body {
             font-weight: 900 !important;
         }
 
-/* Button Error State (Red with X icon) */
-.btn-animate.error-state {
-    width: 130px !important;
-    color: var(--text-primary) !important;
-    background: var(--error) !important;
-    border-color: var(--error) !important;
-}
-
-    .btn-animate.error-state:after {
-        font-family: "Font Awesome 6 Free";
-        font-weight: 900 !important;
-        content: "\f00d" !important; /* FontAwesome 'X' icon */
+    /* Button Error State (Red with X icon) */
+    .btn-animate.error-state {
+        width: 130px !important;
+        color: var(--text-primary) !important;
+        background: var(--error) !important;
+        border-color: var(--error) !important;
     }
+
+        .btn-animate.error-state:after {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900 !important;
+            content: "\f00d" !important; /* FontAwesome 'X' icon */
+        }
 
 @keyframes rotating {
     from {
@@ -244,12 +288,31 @@ input[type="password"]::-ms-clear {
 }
 
 .preview-img-card {
-    display:inline-block;
+    display: flex;
+    justify-content: center;
     background: var(--surface-dark);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-calm);
     padding: 10px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    justify-content:center;
-    width:auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    container-type: inline-size;
+}
+
+/* ==================== Small-screen adjustments ==================== */
+@media (max-width: 576px) {
+    .inputs-card {
+        padding: 1.5rem;
+    }
+
+    .form-col-tagline,
+    .developed-by {
+        margin-top: 24px;
+    }
+
+    .page-columns {
+        gap: 28px;
+    }
 }
