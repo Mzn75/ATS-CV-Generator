@@ -551,3 +551,66 @@ input[type="password"]::-ms-clear {
         gap: 28px;
     }
 }
+
+/* Container to lock everything exactly in the center of the screen */
+.error-page-container {
+    height: 75vh; /* Takes up most of the viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* The giant, glowing numbers */
+.error-code {
+    font-size: 8rem;
+    font-weight: 900;
+    color: var(--secondary-teal, #14a39a);
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0;
+    line-height: 1;
+    text-shadow: 0 0 25px rgba(20, 163, 154, 0.3); /* Subtle teal glow */
+}
+
+/* Typography for the headings */
+.error-title {
+    font-size: 2.5rem;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.error-subtitle {
+    color: #bdbecb;
+    font-family: 'Inter', sans-serif;
+    max-width: 500px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* The return button with hover physics */
+.error-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent;
+    border: 1px solid var(--secondary-teal, #14a39a);
+    color: var(--secondary-teal, #14a39a);
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+    .error-btn:hover {
+        background-color: var(--secondary-teal, #14a39a);
+        color: #ffffff;
+        box-shadow: 0 5px 15px rgba(20, 163, 154, 0.3);
+        transform: translateY(-3px); /* Floats up slightly on hover */
+    }

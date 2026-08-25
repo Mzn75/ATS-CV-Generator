@@ -11,9 +11,10 @@ namespace ATS_CV_Generator.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Route("Home/Error404")]
+        public IActionResult Error404()
         {
-            return View();
+            return View("Error404");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
