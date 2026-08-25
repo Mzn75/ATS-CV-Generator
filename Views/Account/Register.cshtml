@@ -2,9 +2,20 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="cv-card">
-                <h2 class="mb-4" style="color: var(--primary-navy); text-align: center; font-weight:900;">Create Your Account</h2>
+        <div class="col-12">
+            <h1 class="mb-4 text-center" style="color: var(--text-primary); font-weight:900;">
+                ATS-Friendly CV Generator
+            </h1>
+        </div>
+        <div class="col-lg-6" style="padding-right:40px;">
+            <div class="preview-img-card">
+                <img src="/images/cv-example.png" alt="Example CV Layout" class="img-fluid preview-image" />
+            </div>
+        </div>
+        <div class="col-lg-6" style="padding-left:40px;">
+            <h5 class="mb-4" style="color: var(--text-primary); text-align: center; font-family:'Inter'; margin-top:50px;">Generate Yours Now, For Free!</h5>
+            <div class="inputs-card">
+                <h2 class="mb-4" style="color: var(--text-primary); text-align: center; font-weight:900;">Create Your Account</h2>
                 <form asp-action="Register" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="color: var(--error);"></div>
 
@@ -51,6 +62,7 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        // Sign Up Button Animations
         $(document).ready(function() {
             $("#animatedSaveBtn").on("click", function(e) {
                 e.preventDefault();
@@ -87,6 +99,8 @@
                 }, 2000);
             });
         });
+
+        // Password Toggle "Eye Icon"
         $(document).ready(function() {
             $("#togglePassword").on("click", function() {
                 var $input = $("#Password");
@@ -103,6 +117,8 @@
                 }
             });
         });
+
+        // Confirm Password Toggle "Eye Icon"
         $(document).ready(function() {
             $("#toggleConfirmPassword").on("click", function() {
                 var $input = $("#ConfirmPassword");
