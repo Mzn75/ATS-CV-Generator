@@ -1,9 +1,12 @@
 using ATS_CV_Generator.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace ATS_CV_Generator.Controllers
 {
+    [Authorize]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -11,6 +14,7 @@ namespace ATS_CV_Generator.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [Route("Home/Error404")]
         public IActionResult Error404()
         {

@@ -15,12 +15,15 @@ namespace ATS_CV_Generator.Controllers
             _signInManager = signInManager;
         }
 
+        // GET: Show the Views
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
+        [HttpGet]
+        public IActionResult Login() => View();
+
+
+        // POST: Process Registration
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -30,18 +33,20 @@ namespace ATS_CV_Generator.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    FullName = model.FullName // Saving their name right at signup
+                    FullName = model.FullName
                 };
 
+                // Hashing Passwords
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    // Log the user in after they register sending them to the dashboard
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    // Redirect directly to the CV editor after signup
-                    return RedirectToAction("Index", "Resume");
+                    return RedirectToAction("Index", "Home");
                 }
 
+                // If creation fails (e.g. password too weak), send errors to the UI
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -50,42 +55,37 @@ namespace ATS_CV_Generator.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
 
+        // POST: Process Log In
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // PasswordSignInAsync handles checking the hashed password securely
+                // Securely check the hashed password in the DB
                 var result = await _signInManager.PasswordSignInAsync(
                     model.Email,
                     model.Password,
-                    isPersistent: model.RememberMe,
+                    model.RememberMe,
                     lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Resume");
+                    return RedirectToAction("Dashboard", "Home");
                 }
 
-                // If the login fails, return a generic error message for security
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
-
             return View(model);
         }
 
+
+        // POST: Process Log Out
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-
-            // Redirect the user to the login page (or homepage) after logging out
+            // Send user back to the login page after logging out
             return RedirectToAction("Login", "Account");
         }
     }
