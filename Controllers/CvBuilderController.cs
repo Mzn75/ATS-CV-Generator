@@ -1,11 +1,118 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ATS_CV_Generator.Data;
+using ATS_CV_Generator.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ATS_CV_Generator.Controllers
 {
+    [Authorize]
     public class CvBuilderController : Controller
     {
-        public IActionResult PersonalInfo() => View();
-        public IActionResult Education() => View();
-        
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public CvBuilderController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        // ==========================================
+        // STEP 1: PERSONAL INFO
+        // ==========================================
+
+        [HttpGet]
+        public async Task<IActionResult> PersonalInfo()
+        {
+
+            var user = await _userManager.GetUserAsync(User);
+            var draft = await _context.CvDrafts.FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null)
+            {
+                // Pre-fill if no draft exists
+                draft = new CvDraft
+                {
+                    FullName = user.FullName,
+                    Email = user.Email
+                };
+            }
+
+            return View(draft);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PersonalInfo(CvDraft model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var existingDraft = await _context.CvDrafts.FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (existingDraft == null)
+            {
+                // CREATE: Save their very first draft
+                model.UserId = user.Id;
+                model.LastModified = System.DateTime.Now;
+                _context.CvDrafts.Add(model);
+            }
+            else
+            {
+                // UPDATE: Overwrite the existing draft with new form data
+                existingDraft.FullName = model.FullName;
+                existingDraft.Email = model.Email;
+                existingDraft.PhoneNumber = model.PhoneNumber;
+                existingDraft.JobTitle = model.JobTitle;
+                existingDraft.ProfessionalSummary = model.ProfessionalSummary;
+                existingDraft.LastModified = System.DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Route them to Step 2
+            return RedirectToAction("Education");
+        }
+
+        // ==========================================
+        // STEP 2: EDUCATION
+        // ==========================================
+
+        [HttpGet]
+        public async Task<IActionResult> Education()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Notice the .Include()! This grabs all their saved degrees to show on the page.
+            var draft = await _context.CvDrafts
+                .Include(d => d.Educations)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            // Force them back to step 1 if they try to skip ahead
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEducation(int cvId, Education newEducation)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Double-check the draft actually belongs to the logged-in user for security
+            var draft = await _context.CvDrafts.FirstOrDefaultAsync(d => d.Id == cvId && d.UserId == user.Id);
+
+            if (draft != null)
+            {
+                newEducation.CvDraftId = draft.Id;
+                _context.Educations.Add(newEducation);
+
+                draft.LastModified = System.DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
+
+            // Reload the Education page to display the newly added degree
+            return RedirectToAction("Education");
+        }
+
     }
 }
