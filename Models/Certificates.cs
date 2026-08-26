@@ -23,7 +23,6 @@ namespace ATS_CV_Generator.Models
         [Display(Name = "Credential URL", Prompt = "e.g., https://...")]
         public string? CredentialUrl { get; set; }
 
-        // --- THE RELATIONAL LINK ---
         [ForeignKey("CvDraft")]
         public int CvDraftId { get; set; }
 
