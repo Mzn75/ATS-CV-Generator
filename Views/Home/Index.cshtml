@@ -1,4 +1,7 @@
 ﻿@model ApplicationUser
+@{
+    ViewData["Title"] = "Dashboard";
+}
 
 <div class="dashboard-container">
     <div class="dashboard-top-nav">
@@ -28,7 +31,7 @@
     <div class="dashboard-grid">
 
         <!-- CARD 1: Create New CV -->
-        <a href="/CvBuilder/PersonalInfo" class="dashboard-card">
+        <a asp-controller="CvBuilder" asp-action="PersonalInfo" class="dashboard-card">
             <div class="card-icon-wrapper">
                 <i class="fa-solid fa-plus card-icon"></i>
             </div>
