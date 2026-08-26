@@ -13,5 +13,6 @@ namespace ATS_CV_Generator.Data
         public DbSet<Experience> Experiences { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<ProjectItem> Projects { get; set; }
+        public DbSet<CvDraft> CvDrafts { get; set; }
     }
 }
