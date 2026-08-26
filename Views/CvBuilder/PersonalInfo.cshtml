@@ -17,15 +17,13 @@
     </div>
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">1. Personal Information</h2>
-    <p style="color: var(--text-secondary); margin-bottom: 30px;">
-        This information will be placed at the top of your CV. Review your account details below and update them if necessary.
-    </p>
 
     <!-- THE FORM -->
     <form asp-action="PersonalInfo" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
+        <div class="inputs-card">
         <div class="row">
             <!-- Full Name -->
             <div class="col-md-6 mb-3">
@@ -106,7 +104,7 @@
             <span asp-validation-for="ProfessionalSummary" class="field-validation-error text-danger"></span>
             </div>
         </div>
-
+        </div>
         <!-- Navigation Buttons -->
         <div class="nav-buttons d-flex justify-content-between mt-4">
             <!-- Back / Dashboard -->
