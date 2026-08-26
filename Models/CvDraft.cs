@@ -1,6 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using ATS_CV_Generator.Models;
+﻿using ATS_CV_Generator.Models;
+using Microsoft.CodeAnalysis;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ATS_CV_Generator.Models
 {
@@ -30,6 +31,8 @@ namespace ATS_CV_Generator.Models
 
         // 2. Educations
         public List<Education> Educations { get; set; } = new List<Education>();
+        [NotMapped]
+        public Education NewEducation { get; set; } = new Education();
 
         // 3. Experiences
         public List<Experience> Experiences { get; set; } = new List<Experience>();

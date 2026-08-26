@@ -1,4 +1,7 @@
 ﻿@model ATS_CV_Generator.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Log In";
+}
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -20,7 +23,7 @@
                     <div class="mb-3 position-relative">
                         <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
                         <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email"/>
-                        <i class="fa-regular fa-envelope custom-input-icon"></i>
+                        <i class="fa-solid fa-envelope custom-input-icon"></i>
                         <span asp-validation-for="Email" class="field-validation-error"></span>
                     </div>
 
@@ -29,7 +32,7 @@
                         <input asp-for="Password" class="form-control input-with-icon" type="password" placeholder="Enter your password" />
                         <i class="fa-solid fa-lock custom-input-icon"></i>
                         <span class="password-toggle" id="togglePassword">
-                            <i class="fa-regular fa-eye"></i>
+                            <i class="fa-solid fa-eye"></i>
                         </span>
                         <span asp-validation-for="Password" class="field-validation-error"></span>
                     </div>

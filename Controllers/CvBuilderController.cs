@@ -94,23 +94,24 @@ namespace ATS_CV_Generator.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEducation(int cvId, Education newEducation)
+        public async Task<IActionResult> AddEducation(int cvId, CvDraft model)
         {
             var user = await _userManager.GetUserAsync(User);
 
             // Double-check the draft actually belongs to the logged-in user for security
             var draft = await _context.CvDrafts.FirstOrDefaultAsync(d => d.Id == cvId && d.UserId == user.Id);
 
-            if (draft != null)
+            if (model.NewEducation != null)
             {
-                newEducation.CvDraftId = draft.Id;
-                _context.Educations.Add(newEducation);
+                // Link the new degree to this specific CV Draft
+                model.NewEducation.CvDraftId = cvId;
 
-                draft.LastModified = System.DateTime.Now;
+                // Save only the new degree to the database
+                _context.Educations.Add(model.NewEducation);
                 await _context.SaveChangesAsync();
             }
 
-            // Reload the Education page to display the newly added degree
+            // Refresh the page so the user sees the newly added degree in the list above
             return RedirectToAction("Education");
         }
 

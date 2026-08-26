@@ -1,4 +1,4 @@
-﻿@model CvDraft
+﻿@model ATS_CV_Generator.Models.CvDraft
 @{
     ViewData["Title"] = "Education";
 }
@@ -18,107 +18,115 @@
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">2. Education</h2>
     <p style="color: var(--text-secondary); margin-bottom: 30px;">
-        This information will be placed at the top of your CV. Review your account details below and update them if necessary.
+        @foreach (var edu in Model.Educations)
+        {
+            <div>@edu.Degree at @edu.Institution</div>
+        }
     </p>
 
     <!-- THE FORM -->
-    <form asp-action="Education" method="post">
+    <form asp-action="AddEducation" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
         <div class="row">
-            <!-- Full Name -->
+            <!-- Degree -->
             <div class="col-md-6 mb-3">
-                <label asp-for="FullName" class="form-label" style="color: var(--text-secondary);">Full Name</label>
+                <label asp-for="NewEducation.Degree" class="form-label" style="color: var(--text-secondary);">Degree</label>
             
                 <div class="position-relative">
-                    <input asp-for="FullName" class="form-control input-with-icon" type="text" placeholder="Enter your full name" />
-                    <i class="fa-regular fa-user custom-input-icon"></i>
-                    <span asp-validation-for="FullName" class="field-validation-error text-danger"></span>
+                    <input asp-for="NewEducation.Degree" class="form-control input-with-icon" type="text" placeholder="Enter your degree" />
+                    <i class="fa-solid fa-graduation-cap custom-input-icon"></i>
+                    <span asp-validation-for="NewEducation.Degree" class="field-validation-error text-danger"></span>
                 </div>
             </div>
 
-            <!-- Email Address -->
+            <!-- Major -->
             <div class="col-md-6 mb-3">
-                <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
+                <label asp-for="NewEducation.Major" class="form-label" style="color: var(--text-secondary);">Major</label>
             
                 <div class="position-relative">
-                    <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email" />
-                    <i class="fa-regular fa-envelope custom-input-icon"></i>
-                    <span asp-validation-for="Email" class="field-validation-error text-danger"></span>
+                    <input asp-for="NewEducation.Major" class="form-control input-with-icon" type="email" placeholder="Enter your major" />
+                    <i class="fa-solid fa-book custom-input-icon"></i>
+                    <span asp-validation-for="NewEducation.Major" class="field-validation-error text-danger"></span>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <!-- Phone Number -->
+            <!-- Institution -->
             <div class="col-md-6 mb-3">
-                <label asp-for="PhoneNumber" class="form-label" style="color: var(--text-secondary);">Phone Number</label>
+                <label asp-for="NewEducation.Institution" class="form-label" style="color: var(--text-secondary);">Institution</label>
                 
                 <div class="position-relative">
-                    <input asp-for="PhoneNumber" class="form-control input-with-icon" type="tel" placeholder="Enter your phone number"/>
-                    <i class="fa-solid fa-phone custom-input-icon"></i>
-                    <span asp-validation-for="PhoneNumber" class="field-validation-error text-danger"></span>
+                    <input asp-for="NewEducation.Institution" class="form-control input-with-icon" type="tel" placeholder="Enter the institution name" />
+                    <i class="fa-solid fa-building-columns custom-input-icon"></i>
+                    <span asp-validation-for="NewEducation.Institution" class="field-validation-error text-danger"></span>
                 </div>
             </div>
 
-            <!-- Target Job Title -->
+            <!-- Graduation Date -->
             <div class="col-md-6 mb-3">
-                <label asp-for="JobTitle" class="form-label" style="color: var(--text-secondary);">Target Job Title</label>
+                <label asp-for="NewEducation.GradDate" class="form-label" style="color: var(--text-secondary);">Graduation Date</label>
                 <div class="position-relative">
-                    <input asp-for="JobTitle" class="form-control input-with-icon" type="text" placeholder="e.g., Software Engineer" />
-                    <i class="fa-solid fa-briefcase custom-input-icon"></i>
-                    <span asp-validation-for="JobTitle" class="field-validation-error text-danger"></span>
+                    <input asp-for="NewEducation.GradDate" class="form-control input-with-icon" type="date" placeholder="e.g., Software Engineer" />
+                    <i class="fa-solid fa-calendar-days custom-input-icon"></i>
+                    <span asp-validation-for="NewEducation.GradDate" class="field-validation-error text-danger"></span>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Linked In -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="LinkedInUrl" class="form-label" style="color: var(--text-secondary);">LinkedIn Profile</label>
-
-                <div class="position-relative">
-                    <input asp-for="LinkedInUrl" class="form-control input-with-icon" type="url" placeholder="https://www.linkedin.com/in/..." />
-                    <i class="fa-brands fa-linkedin-in custom-input-icon"></i>
-                    <span asp-validation-for="LinkedInUrl" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
-
-            <!-- GitHub -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="GitHubUrl" class="form-label" style="color: var(--text-secondary);">GitHub Profile</label>
-                <div class="position-relative">
-                    <input asp-for="GitHubUrl" class="form-control input-with-icon" type="url" placeholder="https://github.com/..." />
-                    <i class="fa-brands fa-github custom-input-icon"></i>
-                    <span asp-validation-for="GitHubUrl" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Professional Summary -->
-        <div class="mb-3">
-            <label asp-for="ProfessionalSummary" class="form-label" style="color: var(--text-secondary);">Professional Summary</label>
-            <div class="position-relative">
-            <!-- Using a textarea instead of an input for longer text -->
-            <textarea asp-for="ProfessionalSummary" class="form-control input-with-icon" rows="5" placeholder="Briefly describe your professional background and top skills..." style="resize: none; padding-top: 12px;"></textarea>
-            <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
-            <span asp-validation-for="ProfessionalSummary" class="field-validation-error text-danger"></span>
             </div>
         </div>
 
         <!-- Navigation Buttons -->
         <div class="nav-buttons d-flex justify-content-between mt-4">
-            <!-- Back / Dashboard -->
-            <a asp-controller="Home" asp-action="Index"
+            <!-- Back -->
+            <a asp-controller="CvBuilder" asp-action="PersonalInfo"
                class="btn btn-nav btn-nav-back px-5 py-2">
-                <i class="fa-solid fa-arrow-left me-2"></i> Dashboard
+                <i class="fa-solid fa-arrow-left me-2"></i> Personal Info
             </a>
 
             <!-- Next -->
             <button type="submit" class="btn btn-nav btn-nav-next px-5 py-2">
-                Next: Education <i class="fa-solid fa-arrow-right ms-2"></i>
+                Next: Experience <i class="fa-solid fa-arrow-right ms-2"></i>
             </button>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form");
+            if (!form) return;
+
+            // Grab all inputs and textareas inside the form
+            const inputs = form.querySelectorAll("input, textarea");
+
+            inputs.forEach(input => {
+                // Ignore hidden inputs (like the ID field)
+                if (input.type === 'hidden' || !input.name) return;
+
+                // 1. RESTORE DATA: If the input is empty, check if we have saved data
+                if (!input.value) {
+                    const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                }
+
+                // 2. SAVE DATA: As the user types, save it to Session Storage
+                input.addEventListener("input", function() {
+                    sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                });
+            });
+
+            // 3. CLEAN UP: When they officially submit, wipe the temporary storage
+            form.addEventListener("submit", function() {
+                inputs.forEach(input => {
+                    if (input.name) {
+                        sessionStorage.removeItem('cvDraft_' + input.name);
+                    }
+                });
+            });
+        });
+    </script>
+}

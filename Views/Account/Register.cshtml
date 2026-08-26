@@ -1,4 +1,7 @@
 ﻿@model ATS_CV_Generator.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -14,7 +17,7 @@
         <div class="form-col">
             <div class="d-lg-none mb-4 text-center" style="margin-top: 30px;">
                 <button type="button" class="modern-mobile-btn" data-bs-toggle="modal" data-bs-target="#mobilePreviewModal">
-                    <i class="fa-regular fa-eye me-2"></i> Preview CV Template
+                    <i class="fa-solid fa-eye me-2"></i> Preview CV Template
                 </button>
             </div>
             <h5 class="mb-4 form-col-tagline" style="color: var(--text-primary); text-align: center; font-family:'Inter';">
@@ -27,34 +30,34 @@
 
                     <div class="mb-3 position-relative">
                         <label asp-for="FullName" class="form-label" style="color: var(--text-secondary);">Full Name</label>
-                        <input asp-for="FullName" class="form-control input-with-icon" />
-                        <i class="fa-regular fa-user custom-input-icon"></i>
+                        <input asp-for="FullName" class="form-control input-with-icon" placeholder="Enter your full name"/>
+                        <i class="fa-solid fa-user custom-input-icon"></i>
                         <span asp-validation-for="FullName" class="field-validation-error"></span>
                     </div>
 
                     <div class="mb-3 position-relative">
                         <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
-                        <input asp-for="Email" class="form-control input-with-icon" type="email" />
-                        <i class="fa-regular fa-envelope custom-input-icon"></i>
+                        <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email" />
+                        <i class="fa-solid fa-envelope custom-input-icon"></i>
                         <span asp-validation-for="Email" class="field-validation-error"></span>
                     </div>
 
                     <div class="mb-3 position-relative">
                         <label asp-for="Password" class="form-label" style="color: var(--text-secondary);">Password</label>
-                        <input asp-for="Password" class="form-control input-with-icon" type="password" />
+                        <input asp-for="Password" class="form-control input-with-icon" type="password" placeholder="Create your password" />
                         <i class="fa-solid fa-lock custom-input-icon"></i>
                         <span class="password-toggle" id="togglePassword">
-                            <i class="fa-regular fa-eye"></i>
+                            <i class="fa-solid fa-eye"></i>
                         </span>
                         <span asp-validation-for="Password" class="field-validation-error"></span>
                     </div>
 
                     <div class="mb-4 position-relative">
                         <label asp-for="ConfirmPassword" class="form-label" style="color: var(--text-secondary);">Confirm Password</label>
-                        <input asp-for="ConfirmPassword" class="form-control input-with-icon" type="password" />
+                        <input asp-for="ConfirmPassword" class="form-control input-with-icon" type="password" placeholder="Confirm your password" />
                         <i class="fa-solid fa-lock custom-input-icon"></i>
                         <span class="password-toggle" id="toggleConfirmPassword">
-                            <i class="fa-regular fa-eye"></i>
+                            <i class="fa-solid fa-eye"></i>
                         </span>
                         <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
                     </div>
