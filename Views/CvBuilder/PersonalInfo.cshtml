@@ -108,17 +108,17 @@
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="d-flex mt-4">
-            <div class="d-flex justify-content-start">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-primary px-5 py-2" style="background-color: var(--secondary-teal, #14a39a); border: none; border-radius: 8px; font-weight: 600;">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Dashboard
-                </a>
-            </div>
-            <div class="d-flex justify-content-end ms-auto">
-                <button type="submit" class="btn btn-primary px-5 py-2" style="background-color: var(--secondary-teal, #14a39a); border: none; border-radius: 8px; font-weight: 600;">
-                    Next: Education <i class="fa-solid fa-arrow-right ms-2"></i>
-                </button>
-            </div>
+        <div class="nav-buttons d-flex justify-content-between mt-4">
+            <!-- Back / Dashboard -->
+            <a asp-controller="Home" asp-action="Index"
+               class="btn btn-nav btn-nav-back px-5 py-2">
+                <i class="fa-solid fa-arrow-left me-2"></i> Dashboard
+            </a>
+
+            <!-- Next -->
+            <button type="submit" class="btn btn-nav btn-nav-next px-5 py-2">
+                Next: Education <i class="fa-solid fa-arrow-right ms-2"></i>
+            </button>
         </div>
     </form>
 </div>
