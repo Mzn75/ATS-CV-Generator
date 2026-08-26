@@ -1,4 +1,6 @@
-﻿namespace ATS_CV_Generator.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ATS_CV_Generator.Models
 {
     public class ProjectItem
     {
@@ -11,5 +13,10 @@
         public string Technologies { get; set; } = string.Empty;
         public string DateRange { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+
+        [ForeignKey("CvDraft")]
+        public int CvDraftId { get; set; }
+
+        public CvDraft? CvDraft { get; set; }
     }
 }

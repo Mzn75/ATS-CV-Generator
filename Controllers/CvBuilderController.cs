@@ -111,5 +111,38 @@ namespace ATS_CV_Generator.Controllers
             return RedirectToAction("Education");
         }
 
+        // 3.1. Experience GET
+        [HttpGet]
+        public async Task<IActionResult> Experience()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Include existing experiences to display in the list
+            var draft = await _context.CvDrafts
+                .Include(d => d.Experiences)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
+        }
+
+        // 3.2. Experience POST
+        [HttpPost]
+        public async Task<IActionResult> AddExperience(int cvId, CvDraft model)
+        {
+            if (model.NewExperience != null)
+            {
+                // Link the new experience to the existing draft
+                model.NewExperience.CvDraftId = cvId;
+
+                // Save to database
+                _context.Experiences.Add(model.NewExperience);
+                await _context.SaveChangesAsync();
+            }
+
+            // Reload the page to show the updated list
+            return RedirectToAction("Experience");
+        }
     }
 }
