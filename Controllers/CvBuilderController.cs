@@ -4,9 +4,8 @@ namespace ATS_CV_Generator.Controllers
 {
     public class CvBuilderController : Controller
     {
-        public IActionResult PersonalInfo()
-        {
-            return View();
-        }
+        public IActionResult PersonalInfo() => View();
+        public IActionResult Education() => View();
+        
     }
 }

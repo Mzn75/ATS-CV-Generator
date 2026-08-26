@@ -1,6 +1,6 @@
 ﻿@model CvDraft
 @{
-    ViewData["Title"] = "Personal Information";
+    ViewData["Title"] = "Education";
 }
 
 <div class="builder-container mx-auto" style="max-width: 700px; margin-top: 40px;">
@@ -9,20 +9,20 @@
     <div class="progress-wrapper mb-5">
         <div class="d-flex justify-content-between mb-2" style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">
             <span>PROGRESS</span>
-            <span>20%</span>
+            <span>40%</span>
         </div>
         <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
-            <div class="progress-bar" role="progressbar" style="width: 20%; background-color: var(--secondary-teal, --accent-coral);"></div>
+            <div class="progress-bar" role="progressbar" style="width: 40%; background-color: var(--secondary-teal, --accent-coral);"></div>
         </div>
     </div>
 
-    <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">1. Personal Information</h2>
+    <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">2. Education</h2>
     <p style="color: var(--text-secondary); margin-bottom: 30px;">
         This information will be placed at the top of your CV. Review your account details below and update them if necessary.
     </p>
 
     <!-- THE FORM -->
-    <form asp-action="PersonalInfo" method="post">
+    <form asp-action="Education" method="post">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
