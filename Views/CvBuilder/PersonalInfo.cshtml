@@ -22,7 +22,7 @@
     </p>
 
     <!-- THE FORM -->
-    <form asp-action="PersonalInfo" method="post">
+    <form asp-action="PersonalInfo" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
@@ -122,3 +122,41 @@
         </div>
     </form>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("form");
+            if (!form) return;
+
+            // Grab all inputs and textareas inside the form
+            const inputs = form.querySelectorAll("input, textarea");
+
+            inputs.forEach(input => {
+                // Ignore hidden inputs (like the ID field)
+                if (input.type === 'hidden' || !input.name) return;
+
+                // 1. RESTORE DATA: If the input is empty, check if we have saved data
+                if (!input.value) {
+                    const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                }
+
+                // 2. SAVE DATA: As the user types, save it to Session Storage
+                input.addEventListener("input", function () {
+                    sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                });
+            });
+
+            // 3. CLEAN UP: When they officially submit, wipe the temporary storage
+            form.addEventListener("submit", function () {
+                inputs.forEach(input => {
+                    if (input.name) {
+                        sessionStorage.removeItem('cvDraft_' + input.name);
+                    }
+                });
+            });
+        });
+    </script>
+}
