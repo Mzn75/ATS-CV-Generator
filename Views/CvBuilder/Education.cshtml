@@ -47,7 +47,7 @@
                 <label asp-for="NewEducation.Major" class="form-label" style="color: var(--text-secondary);">Major</label>
             
                 <div class="position-relative">
-                    <input asp-for="NewEducation.Major" class="form-control input-with-icon" type="email" placeholder="Enter your major" />
+                    <input asp-for="NewEducation.Major" class="form-control input-with-icon" type="text" placeholder="Enter your major" />
                     <i class="fa-solid fa-book custom-input-icon"></i>
                     <span asp-validation-for="NewEducation.Major" class="field-validation-error text-danger"></span>
                 </div>
@@ -60,7 +60,7 @@
                 <label asp-for="NewEducation.Institution" class="form-label" style="color: var(--text-secondary);">Institution</label>
                 
                 <div class="position-relative">
-                    <input asp-for="NewEducation.Institution" class="form-control input-with-icon" type="tel" placeholder="Enter the institution name" />
+                    <input asp-for="NewEducation.Institution" class="form-control input-with-icon" type="text" placeholder="Enter the institution name" />
                     <i class="fa-solid fa-building-columns custom-input-icon"></i>
                     <span asp-validation-for="NewEducation.Institution" class="field-validation-error text-danger"></span>
                 </div>
@@ -70,7 +70,7 @@
             <div class="col-md-6 mb-3">
                 <label asp-for="NewEducation.GradDate" class="form-label" style="color: var(--text-secondary);">Graduation Date</label>
                 <div class="position-relative">
-                    <input asp-for="NewEducation.GradDate" class="form-control input-with-icon" type="date" placeholder="Choose the graduation date" />
+                    <input asp-for="NewEducation.GradDate" class="form-control input-with-icon" type="date" placeholder="Choose the graduation date" id="date" />
                     <i class="fa-solid fa-calendar-days custom-input-icon"></i>
                     <span asp-validation-for="NewEducation.GradDate" class="field-validation-error text-danger"></span>
                 </div>
