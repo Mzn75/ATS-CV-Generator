@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using ATS_CV_Generator.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace ATS_CV_Generator.Models

@@ -4,7 +4,7 @@ namespace ATS_CV_Generator.Controllers
 {
     public class CvBuilderController : Controller
     {
-        public IActionResult Index()
+        public IActionResult PersonalInfo()
         {
             return View();
         }
