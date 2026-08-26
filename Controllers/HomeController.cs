@@ -1,5 +1,6 @@
 using ATS_CV_Generator.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,9 +10,17 @@ namespace ATS_CV_Generator.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _userManager = userManager;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            return View(currentUser);
         }
 
         [AllowAnonymous]
