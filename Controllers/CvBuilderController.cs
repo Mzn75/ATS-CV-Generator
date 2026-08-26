@@ -19,10 +19,7 @@ namespace ATS_CV_Generator.Controllers
             _userManager = userManager;
         }
 
-        // ==========================================
-        // STEP 1: PERSONAL INFO
-        // ==========================================
-
+        // 1.1. Personal Info GET
         [HttpGet]
         public async Task<IActionResult> PersonalInfo()
         {
@@ -43,6 +40,7 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
+        // 1.2. Personal Info POST
         [HttpPost]
         public async Task<IActionResult> PersonalInfo(CvDraft model)
         {
@@ -73,16 +71,13 @@ namespace ATS_CV_Generator.Controllers
             return RedirectToAction("Education");
         }
 
-        // ==========================================
-        // STEP 2: EDUCATION
-        // ==========================================
-
+        // 2.1. Education GET
         [HttpGet]
         public async Task<IActionResult> Education()
         {
             var user = await _userManager.GetUserAsync(User);
 
-            // Notice the .Include()! This grabs all their saved degrees to show on the page.
+            // Grab all user saved degrees to show on the page.
             var draft = await _context.CvDrafts
                 .Include(d => d.Educations)
                 .FirstOrDefaultAsync(d => d.UserId == user.Id);
@@ -93,6 +88,7 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
+        // 2.2. Education POST
         [HttpPost]
         public async Task<IActionResult> AddEducation(int cvId, CvDraft model)
         {
