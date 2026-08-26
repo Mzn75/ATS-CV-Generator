@@ -9,9 +9,6 @@ namespace ATS_CV_Generator.Models
         //IdentityUser already includes main user data
         [Required(ErrorMessage = "Please enter your full name.")]
         public string? FullName { get; set; }
-        public string? GitHubUrl { get; set; }
-        public string? LinkedInUrl { get; set; }
-        public string? ProfessionalTitle { get; set; }
 
         // Link data directly to the user
         public virtual ICollection<Experience> Experiences { get; set; } = new List<Experience>();
