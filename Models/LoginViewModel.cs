@@ -4,11 +4,11 @@ namespace ATS_CV_Generator.Models
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter your email.")]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your password.")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
