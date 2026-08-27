@@ -93,13 +93,25 @@ namespace ATS_CV_Generator.Controllers
         public async Task<IActionResult> AddEducation(CvDraft model)
         {
             var user = await _userManager.GetUserAsync(User);
-
             var draft = await _context.CvDrafts
-            .Include(d => d.Educations)
-            .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+                .Include(d => d.Educations)
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
 
             if (draft == null) return RedirectToAction("Education");
 
+            // 1. Force the controller to read the button value directly
+            string actionType = Request.Form["actionType"];
+
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewEducation?.Degree) &&
+                               string.IsNullOrWhiteSpace(model.NewEducation?.Institution);
+
+            // 2. If they clicked Next on an empty form, bypass validation and redirect
+            if (actionType == "next" && isFormEmpty)
+            {
+                return RedirectToAction("Experience");
+            }
+
+            // 3. Otherwise, validate the data
             ModelState.Clear();
             TryValidateModel(model.NewEducation);
 
@@ -108,20 +120,22 @@ namespace ATS_CV_Generator.Controllers
                 return View("Education", draft);
             }
 
+            // 4. Save the data
             if (model.NewEducation != null)
             {
-                // Link the education to the CV
                 model.NewEducation.CvDraftId = model.Id;
-
-                // THE FIX: Link the education directly to the logged-in User
                 model.NewEducation.UserId = user.Id;
-
                 _context.Educations.Add(model.NewEducation);
                 await _context.SaveChangesAsync();
+            }
 
+            // 5. Final routing check
+            if (actionType == "next")
+            {
                 return RedirectToAction("Experience");
             }
 
+            // Refreshes the page if they clicked "Save & Add Another"
             return RedirectToAction("Education");
         }
 
@@ -143,19 +157,52 @@ namespace ATS_CV_Generator.Controllers
 
         // 3.2. Experience POST
         [HttpPost]
-        public async Task<IActionResult> AddExperience(int cvId, CvDraft model)
+        public async Task<IActionResult> AddExperience(CvDraft model)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var draft = await _context.CvDrafts
+                .Include(d => d.Experiences)
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("Experience");
+
+            // 1. Force the controller to read the button value directly
+            string actionType = Request.Form["actionType"];
+
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewExperience?.JobTitle) &&
+                               string.IsNullOrWhiteSpace(model.NewExperience?.Company);
+
+            // 2. If they clicked Next on an empty form, bypass validation and redirect
+            if (actionType == "next" && isFormEmpty)
+            {
+                return RedirectToAction("Projects");
+            }
+
+            // 3. Otherwise, validate the data
+            ModelState.Clear();
+            TryValidateModel(model.NewExperience);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Experience", draft);
+            }
+
+            // 4. Save the data
             if (model.NewExperience != null)
             {
-                // Link the new experience to the existing draft
-                model.NewExperience.CvDraftId = cvId;
-
-                // Save to database
+                model.NewExperience.CvDraftId = model.Id;
+                model.NewExperience.UserId = user.Id;
                 _context.Experiences.Add(model.NewExperience);
                 await _context.SaveChangesAsync();
             }
 
-            // Reload the page to show the updated list
+            // 5. Final routing check
+            if (actionType == "next")
+            {
+                return RedirectToAction("Projects");
+            }
+
+            // Refreshes the page if they clicked "Save & Add Another"
             return RedirectToAction("Experience");
         }
     }
