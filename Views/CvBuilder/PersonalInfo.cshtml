@@ -24,86 +24,85 @@
         <input type="hidden" asp-for="Id" />
 
         <div class="inputs-card">
-        <div class="row">
-            <!-- Full Name -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="FullName" class="form-label" style="color: var(--text-secondary);">Full Name</label>
-            
-                <div class="position-relative">
-                    <input asp-for="FullName" class="form-control input-with-icon" type="text" placeholder="Enter your full name" />
-                    <i class="fa-solid fa-user custom-input-icon"></i>
-                    <span asp-validation-for="FullName" class="field-validation-error text-danger"></span>
+            <div class="row">
+                <!-- Full Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FullName" class="form-label" style="color: var(--text-secondary);">Full Name</label>
+
+                    <div class="position-relative">
+                        <input asp-for="FullName" class="form-control input-with-icon" type="text" placeholder="Enter your full name" />
+                        <i class="fa-solid fa-user custom-input-icon"></i>
+                        <span asp-validation-for="FullName" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Email Address -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
+
+                    <div class="position-relative">
+                        <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email" />
+                        <i class="fa-solid fa-envelope custom-input-icon"></i>
+                        <span asp-validation-for="Email" class="field-validation-error text-danger"></span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Email Address -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="Email" class="form-label" style="color: var(--text-secondary);">Email Address</label>
-            
-                <div class="position-relative">
-                    <input asp-for="Email" class="form-control input-with-icon" type="email" placeholder="Enter your email" />
-                    <i class="fa-solid fa-envelope custom-input-icon"></i>
-                    <span asp-validation-for="Email" class="field-validation-error text-danger"></span>
+            <div class="row">
+                <!-- Phone Number -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PhoneNumber" class="form-label" style="color: var(--text-secondary);">Phone Number</label>
+
+                    <div class="position-relative">
+                        <input asp-for="PhoneNumber" class="form-control input-with-icon" type="tel" placeholder="Enter your phone number" />
+                        <i class="fa-solid fa-phone custom-input-icon"></i>
+                        <span asp-validation-for="PhoneNumber" class="field-validation-error text-danger"></span>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <!-- Phone Number -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="PhoneNumber" class="form-label" style="color: var(--text-secondary);">Phone Number</label>
-                
-                <div class="position-relative">
-                    <input asp-for="PhoneNumber" class="form-control input-with-icon" type="tel" placeholder="Enter your phone number"/>
-                    <i class="fa-solid fa-phone custom-input-icon"></i>
-                    <span asp-validation-for="PhoneNumber" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
-
-            <!-- Target Job Title -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="JobTitle" class="form-label" style="color: var(--text-secondary);">Target Job Title</label>
-                <div class="position-relative">
-                    <input asp-for="JobTitle" class="form-control input-with-icon" type="text" placeholder="e.g., Software Engineer" />
-                    <i class="fa-solid fa-briefcase custom-input-icon"></i>
-                    <span asp-validation-for="JobTitle" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Linked In -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="LinkedInUrl" class="form-label" style="color: var(--text-secondary);">LinkedIn Profile</label>
-
-                <div class="position-relative">
-                    <input asp-for="LinkedInUrl" class="form-control input-with-icon" type="url" placeholder="https://www.linkedin.com/in/..." />
-                    <i class="fa-brands fa-linkedin-in custom-input-icon"></i>
-                    <span asp-validation-for="LinkedInUrl" class="field-validation-error text-danger"></span>
+                <!-- Target Job Title -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="JobTitle" class="form-label" style="color: var(--text-secondary);">Target Job Title</label>
+                    <div class="position-relative">
+                        <input asp-for="JobTitle" class="form-control input-with-icon" type="text" placeholder="e.g., Software Engineer" />
+                        <i class="fa-solid fa-briefcase custom-input-icon"></i>
+                        <span asp-validation-for="JobTitle" class="field-validation-error text-danger"></span>
+                    </div>
                 </div>
             </div>
 
-            <!-- GitHub -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="GitHubUrl" class="form-label" style="color: var(--text-secondary);">GitHub Profile</label>
-                <div class="position-relative">
-                    <input asp-for="GitHubUrl" class="form-control input-with-icon" type="url" placeholder="https://github.com/..." />
-                    <i class="fa-brands fa-github custom-input-icon"></i>
-                    <span asp-validation-for="GitHubUrl" class="field-validation-error text-danger"></span>
+            <div class="row">
+                <!-- Linked In -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LinkedInUrl" class="form-label" style="color: var(--text-secondary);">LinkedIn Profile</label>
+
+                    <div class="position-relative">
+                        <input asp-for="LinkedInUrl" class="form-control input-with-icon" type="url" placeholder="https://www.linkedin.com/in/..." />
+                        <i class="fa-brands fa-linkedin-in custom-input-icon"></i>
+                        <span asp-validation-for="LinkedInUrl" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- GitHub -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="GitHubUrl" class="form-label" style="color: var(--text-secondary);">GitHub Profile</label>
+                    <div class="position-relative">
+                        <input asp-for="GitHubUrl" class="form-control input-with-icon" type="url" placeholder="https://github.com/..." />
+                        <i class="fa-brands fa-github custom-input-icon"></i>
+                        <span asp-validation-for="GitHubUrl" class="field-validation-error text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Professional Summary -->
-        <div class="mb-3">
-            <label asp-for="ProfessionalSummary" class="form-label" style="color: var(--text-secondary);">Professional Summary</label>
-            <div class="position-relative">
-            <!-- Using a textarea instead of an input for longer text -->
-            <textarea asp-for="ProfessionalSummary" class="form-control input-with-icon" rows="5" placeholder="Enter a brief description about your professional background and top skills..." style="resize: none; padding-top: 12px;"></textarea>
-            <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
-            <span asp-validation-for="ProfessionalSummary" class="field-validation-error text-danger"></span>
+            <!-- Professional Summary -->
+            <div class="mb-3">
+                <label asp-for="ProfessionalSummary" class="form-label" style="color: var(--text-secondary);">Professional Summary</label>
+                <div class="position-relative">
+                    <textarea asp-for="ProfessionalSummary" class="form-control input-with-icon" rows="5" placeholder="Enter a brief description about your professional background and top skills..." style="resize: none; padding-top: 12px;"></textarea>
+                    <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
+                    <span asp-validation-for="ProfessionalSummary" class="field-validation-error text-danger"></span>
+                </div>
             </div>
-        </div>
         </div>
         <!-- Navigation Buttons -->
         <div class="nav-buttons d-flex justify-content-between mt-4">
@@ -122,7 +121,7 @@
 </div>
 @section Scripts {
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const form = document.getElementById("form");
             if (!form) return;
 
@@ -142,13 +141,13 @@
                 }
 
                 // 2. SAVE DATA: As the user types, save it to Session Storage
-                input.addEventListener("input", function () {
+                input.addEventListener("input", function() {
                     sessionStorage.setItem('cvDraft_' + input.name, input.value);
                 });
             });
 
             // 3. CLEAN UP: When they officially submit, wipe the temporary storage
-            form.addEventListener("submit", function () {
+            form.addEventListener("submit", function() {
                 inputs.forEach(input => {
                     if (input.name) {
                         sessionStorage.removeItem('cvDraft_' + input.name);
