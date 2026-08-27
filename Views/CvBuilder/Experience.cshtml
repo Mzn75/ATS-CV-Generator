@@ -17,15 +17,32 @@
     </div>
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">3. Experiences</h2>
-    @foreach (var exp in Model.Experiences)
-    {
-        <p style="color: var(--text-secondary); margin-bottom: 30px;">@exp.JobTitle at @exp.Company</p>
-    }
 
     <!-- THE FORM -->
     <form asp-action="AddExperience" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
+
+        @if (Model.Experiences != null && Model.Experiences.Any())
+        {
+            <div class="mb-4">
+                <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Experiences</h5>
+                <div class="row">
+                    @foreach (var exp in Model.Experiences)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@exp.JobTitle</h5>
+                                <p style="color: var(--text-primary, #F8F9FB); margin-bottom: 5px;"><strong>@exp.Company</strong></p>
+                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@exp.Location</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Experience</h5>
+        }
 
         <div class="inputs-card">
             <div class="row">
@@ -46,7 +63,7 @@
 
             
                     <div class="position-relative">
-                        <input asp-for="NewExperience.Company" class="form-control input-with-icon" type="email" placeholder="Enter the company name" />
+                        <input asp-for="NewExperience.Company" class="form-control input-with-icon" type="text" placeholder="Enter the company name" />
                         <i class="fa-solid fa-book custom-input-icon"></i>
                         <span asp-validation-for="NewExperience.Company" class="field-validation-error text-danger"></span>
                     </div>
@@ -59,7 +76,7 @@
                     <label asp-for="NewExperience.Location" class="form-label" style="color: var(--text-secondary);">Location</label>
 
                     <div class="position-relative">
-                        <input asp-for="NewExperience.Location" class="form-control input-with-icon" type="tel" placeholder="Enter the company location" />
+                        <input asp-for="NewExperience.Location" class="form-control input-with-icon" type="text" placeholder="Enter the company location" />
                         <i class="fa-solid fa-building-columns custom-input-icon"></i>
                         <span asp-validation-for="NewExperience.Location" class="field-validation-error text-danger"></span>
                     </div>
@@ -95,6 +112,9 @@
                         <span asp-validation-for="NewExperience.Description" class="field-validation-error text-danger"></span>
                     </div>
                 </div>
+                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                    Save
+                </button>
             </div>
         </div>
 

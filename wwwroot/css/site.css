@@ -571,9 +571,9 @@ input[type="password"]::-ms-clear {
     .btn-nav-back:hover {
         color: #ffffff;
         background: rgba(255, 255, 255, 0.06);
-        border-color: var(--secondary-teal, #14a39a);
+        border-color: var(--accent-coral, #E8937D);
         transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 25px rgba(20, 163, 154, 0.25);
+        box-shadow: 0 8px 25px rgba(231, 111, 81, 0.25);
     }
 
     .btn-nav-back:active {
