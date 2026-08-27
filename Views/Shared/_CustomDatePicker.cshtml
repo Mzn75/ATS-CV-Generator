@@ -1,0 +1,266 @@
+﻿@model string
+@{
+    var uid = Guid.NewGuid().ToString("N");
+}
+
+<style>
+    /* 100% Static CSS to prevent Razor crashing */
+    .cv-my-popup {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        width: 320px;
+        background: var(--surface-dark, #121C29);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(0.98);
+        transition: all 0.2s ease;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .cv-my-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+    .cv-my-split {
+        display: flex;
+        gap: 10px;
+        height: 180px;
+    }
+
+    .cv-my-months {
+        flex: 3;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+
+    .cv-my-years {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        overflow-y: auto;
+        padding-right: 4px;
+        border-left: 1px solid rgba(255,255,255,0.1);
+        padding-left: 10px;
+    }
+
+        /* Custom Scrollbar for years */
+        .cv-my-years::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .cv-my-years::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+    .cv-my-btn {
+        background: transparent;
+        color: var(--text-primary, #fff);
+        border: none;
+        border-radius: 6px;
+        padding: 8px 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+
+        .cv-my-btn:hover {
+            background: var(--navy-hover, #142A3F);
+        }
+
+        .cv-my-btn.selected {
+            background: var(--secondary-teal, #2A9D8F);
+            color: #fff;
+            font-weight: 700;
+        }
+
+    .cv-my-footer {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .cv-my-clear {
+        background: transparent;
+        color: var(--text-secondary, #94A3B8);
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+
+        .cv-my-clear:hover {
+            color: #fff;
+            background: var(--navy-hover, #142A3F);
+        }
+
+    .cv-placeholder {
+        color: #475569;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+        background: transparent !important;
+    }
+
+    .input-with-icon.active .cv-placeholder {
+        color: var(--text-primary, #fff);
+    }
+</style>
+
+<div class="position-relative w-100" id="container-@uid">
+
+    <!-- UI Input -->
+    <div class="form-control input-with-icon d-flex align-items-center" id="dateInput-@uid" tabindex="0" role="button" style="cursor: pointer; min-height: 45px;">
+        <span class="cv-placeholder" id="dateDisplay-@uid">Select Date</span>
+    </div>
+
+    <i class="fa-solid fa-calendar-days custom-input-icon"></i>
+
+    <!-- ASP.NET string binding (Saves as MM/YYYY) -->
+    <input type="hidden" asp-for="@Model" id="hiddenDate-@uid" />
+
+    <!-- Popup -->
+    <div class="cv-my-popup" id="popup-@uid">
+        <div class="cv-my-split">
+            <div class="cv-my-months" id="monthsGrid-@uid"></div>
+            <div class="cv-my-years" id="yearsList-@uid"></div>
+        </div>
+        <div class="cv-my-footer">
+            <button type="button" class="cv-my-clear" id="clearBtn-@uid">Clear</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const input = document.getElementById('dateInput-@uid');
+        const display = document.getElementById('dateDisplay-@uid');
+        const hidden = document.getElementById('hiddenDate-@uid');
+        const popup = document.getElementById('popup-@uid');
+        const monthsGrid = document.getElementById('monthsGrid-@uid');
+        const yearsList = document.getElementById('yearsList-@uid');
+        const clearBtn = document.getElementById('clearBtn-@uid');
+
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        let selMonth = null;
+        let selYear = null;
+
+        // Parse existing value if editing (expects "MM/YYYY")
+        if (hidden.value && hidden.value.includes('/')) {
+            const parts = hidden.value.split('/');
+            selMonth = parseInt(parts[0]) - 1; // 0-based
+            selYear = parseInt(parts[1]);
+        }
+
+        function updateUI() {
+            if (selMonth !== null && selYear !== null) {
+                // Pad month with leading zero
+                const m = (selMonth + 1).toString().padStart(2, '0');
+                const val = `${m}/${selYear}`;
+
+                display.textContent = `${monthNames[selMonth]} ${selYear}`;
+                display.style.color = "var(--text-primary, #fff)";
+                hidden.value = val;
+            } else {
+                display.textContent = 'Select Date';
+                display.style.color = "#475569";
+                hidden.value = '';
+            }
+            renderLists();
+        }
+
+        function renderLists() {
+            // Render Months
+            monthsGrid.innerHTML = '';
+            monthNames.forEach((m, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `cv-my-btn ${selMonth === index ? 'selected' : ''}`;
+                btn.textContent = m;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    selMonth = index;
+                    if (selYear === null) selYear = new Date().getFullYear();
+                    updateUI();
+                    popup.classList.remove('show');
+                    input.classList.remove('active');
+                };
+                monthsGrid.appendChild(btn);
+            });
+
+            // Render Years (Future above, Past under)
+            yearsList.innerHTML = '';
+            const currentY = new Date().getFullYear();
+
+            for (let y = currentY + 10; y >= currentY - 50; y--) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `cv-my-btn ${selYear === y ? 'selected' : ''}`;
+                btn.textContent = y;
+
+                // Set the scroll target: Use selected year, OR current year if nothing is selected yet
+                if (selYear === y || (selYear === null && y === currentY)) {
+                    btn.id = `scrollTarget-@uid`;
+                }
+
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    selYear = y;
+                    if (selMonth === null) selMonth = 0;
+                    updateUI();
+                    renderLists();
+                };
+                yearsList.appendChild(btn);
+            }
+        }
+
+        input.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isShowing = popup.classList.toggle('show');
+            input.classList.toggle('active');
+
+            if (isShowing) {
+                renderLists();
+                // Scroll directly to the target year and center it in the view
+                const targetBtn = document.getElementById(`scrollTarget-@uid`);
+                if (targetBtn) {
+                    targetBtn.scrollIntoView({ block: 'center', behavior: 'instant' });
+                }
+            }
+        });
+
+        clearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selMonth = null;
+            selYear = null;
+            updateUI();
+            popup.classList.remove('show');
+            input.classList.remove('active');
+        });
+
+        document.addEventListener('click', () => {
+            popup.classList.remove('show');
+            input.classList.remove('active');
+        });
+
+        popup.addEventListener('click', (e) => e.stopPropagation());
+
+        updateUI(); // Init
+    })();
+</script>
