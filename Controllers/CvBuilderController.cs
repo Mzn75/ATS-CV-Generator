@@ -90,24 +90,38 @@ namespace ATS_CV_Generator.Controllers
 
         // 2.2. Education POST
         [HttpPost]
-        public async Task<IActionResult> AddEducation(int cvId, CvDraft model)
+        public async Task<IActionResult> AddEducation(CvDraft model)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            // Double-check the draft actually belongs to the logged-in user for security
-            var draft = await _context.CvDrafts.FirstOrDefaultAsync(d => d.Id == cvId && d.UserId == user.Id);
+            var draft = await _context.CvDrafts
+            .Include(d => d.Educations)
+            .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("Education");
+
+            ModelState.Clear();
+            TryValidateModel(model.NewEducation);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Education", draft);
+            }
 
             if (model.NewEducation != null)
             {
-                // Link the new degree to this specific CV Draft
-                model.NewEducation.CvDraftId = cvId;
+                // Link the education to the CV
+                model.NewEducation.CvDraftId = model.Id;
 
-                // Save only the new degree to the database
+                // THE FIX: Link the education directly to the logged-in User
+                model.NewEducation.UserId = user.Id;
+
                 _context.Educations.Add(model.NewEducation);
                 await _context.SaveChangesAsync();
+
+                return RedirectToAction("Experience");
             }
 
-            // Refresh the page so the user sees the newly added degree in the list above
             return RedirectToAction("Education");
         }
 
