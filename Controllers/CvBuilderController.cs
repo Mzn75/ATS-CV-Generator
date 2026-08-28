@@ -264,5 +264,64 @@ namespace ATS_CV_Generator.Controllers
 
             return RedirectToAction("Projects");
         }
+
+        // 5.1. Certificates GET
+        [HttpGet]
+        public async Task<IActionResult> Certificates()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var draft = await _context.CvDrafts
+                .Include(d => d.Certificates)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
+        }
+
+        // 5.2. Certificates POST
+        [HttpPost]
+        public async Task<IActionResult> AddCertificate(CvDraft model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var draft = await _context.CvDrafts
+                .Include(d => d.Certificates)
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("Certificates");
+
+            string actionType = Request.Form["actionType"];
+
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewCertificate?.Name) &&
+                               string.IsNullOrWhiteSpace(model.NewCertificate?.Issuer);
+
+            if (actionType == "next" && isFormEmpty)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model.NewCertificate);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Certificates", draft);
+            }
+
+            if (model.NewCertificate != null)
+            {
+                model.NewCertificate.CvDraftId = model.Id;
+                _context.Certificates.Add(model.NewCertificate);
+                await _context.SaveChangesAsync();
+            }
+
+            if (actionType == "next")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Certificates");
+        }
     }
 }

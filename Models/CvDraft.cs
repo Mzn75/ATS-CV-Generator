@@ -49,5 +49,8 @@ namespace ATS_CV_Generator.Models
 
         // 6. Certificates
         public List<Certificates> Certificates { get; set; } = new List<Certificates>();
+
+        [NotMapped]
+        public Certificates NewCertificate { get; set; } = new Certificates();
     }
 }

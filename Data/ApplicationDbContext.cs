@@ -14,6 +14,7 @@ namespace ATS_CV_Generator.Data
         public DbSet<Education> Educations { get; set; }
         public DbSet<ProjectItem> Projects { get; set; }
         public DbSet<CvDraft> CvDrafts { get; set; }
+        public DbSet<Certificates> Certificates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

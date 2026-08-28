@@ -1,0 +1,151 @@
+@model ATS_CV_Generator.Models.CvDraft
+@{
+    ViewData["Title"] = "Certificates";
+}
+
+<div class="builder-container mx-auto" style="max-width: 700px; margin-top: 40px;">
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrapper mb-5">
+        <div class="d-flex justify-content-between mb-2" style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">
+            <span>PROGRESS</span>
+            <span>100%</span>
+        </div>
+        <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
+            <div class="progress-bar" role="progressbar" style="width: 100%; background-color: var(--secondary-teal, --accent-coral);"></div>
+        </div>
+    </div>
+
+    <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">5. Certificates</h2>
+
+    <!-- THE FORM -->
+    <form asp-action="AddCertificate" method="post" id="form">
+        <!-- Hidden ID so Entity Framework knows which draft to update -->
+        <input type="hidden" asp-for="Id" />
+
+        @if (Model.Certificates != null && Model.Certificates.Any())
+        {
+            <div class="mb-4">
+                <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Certificates</h5>
+                <div class="row">
+                    @foreach (var cert in Model.Certificates)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@cert.Name</h5>
+                                <p style="color: var(--text-primary, #F8F9FB); margin-bottom: 5px;"><strong>@cert.Issuer</strong></p>
+                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@cert.IssueDate</p>
+                                @if (!string.IsNullOrEmpty(cert.CredentialUrl))
+                                {
+                                    <p style="margin-bottom: 0; font-size: 0.85rem;">
+                                        <a href="@cert.CredentialUrl" target="_blank" style="color: var(--secondary-teal, #2A9D8F);">View Credential <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i></a>
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Certificate</h5>
+        }
+
+        <div class="inputs-card">
+            <div class="row">
+                <!-- Certificate Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewCertificate.Name" class="form-label" style="color: var(--text-secondary);">Certificate Name</label>
+                    <div class="position-relative">
+                        <input asp-for="NewCertificate.Name" class="form-control input-with-icon" type="text" placeholder="e.g. Python Fundamentals" />
+                        <i class="fa-solid fa-award custom-input-icon"></i>
+                        <span asp-validation-for="NewCertificate.Name" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Issuing Organization -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewCertificate.Issuer" class="form-label" style="color: var(--text-secondary);">Issuing Organization</label>
+                    <div class="position-relative">
+                        <input asp-for="NewCertificate.Issuer" class="form-control input-with-icon" type="text" placeholder="e.g. Huawei, Google, AWS" />
+                        <i class="fa-solid fa-building-columns custom-input-icon"></i>
+                        <span asp-validation-for="NewCertificate.Issuer" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Date Earned -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewCertificate.IssueDate" class="form-label" style="color: var(--text-secondary);">Date Earned</label>
+                    <div class="position-relative">
+                        <input asp-for="NewCertificate.IssueDate" class="form-control input-with-icon" type="text" placeholder="e.g. August 2026" />
+                        <i class="fa-solid fa-calendar-days custom-input-icon"></i>
+                        <span asp-validation-for="NewCertificate.IssueDate" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Credential URL -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewCertificate.CredentialUrl" class="form-label" style="color: var(--text-secondary);">Credential URL</label>
+                    <div class="position-relative">
+                        <input asp-for="NewCertificate.CredentialUrl" class="form-control input-with-icon" type="url" placeholder="https://..." />
+                        <i class="fa-solid fa-link custom-input-icon"></i>
+                        <span asp-validation-for="NewCertificate.CredentialUrl" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                Save
+            </button>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons d-flex justify-content-between mt-4">
+            <!-- Back -->
+            <a asp-controller="CvBuilder" asp-action="Projects"
+               class="btn btn-nav btn-nav-back px-5 py-2">
+                <i class="fa-solid fa-arrow-left me-2"></i> Projects
+            </a>
+
+            <!-- Finish -->
+            <button type="submit" name="actionType" value="next" class="btn btn-nav btn-nav-next px-5 py-2">
+                Finish <i class="fa-solid fa-check ms-2"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form");
+            if (!form) return;
+
+            const inputs = form.querySelectorAll("input, textarea");
+
+            inputs.forEach(input => {
+                if (input.type === 'hidden' || !input.name) return;
+
+                if (!input.value) {
+                    const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                }
+
+                input.addEventListener("input", function() {
+                    sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                });
+            });
+
+            form.addEventListener("submit", function() {
+                inputs.forEach(input => {
+                    if (input.name) {
+                        sessionStorage.removeItem('cvDraft_' + input.name);
+                    }
+                });
+            });
+        });
+    </script>
+}
