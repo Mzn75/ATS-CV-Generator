@@ -717,3 +717,7 @@ input[type="password"]::-ms-clear {
         box-shadow: 0 5px 15px rgba(20, 163, 154, 0.3);
         transform: translateY(-3px); /* Floats up slightly on hover */
     }
+
+.toggle-header[aria-expanded="false"] .toggle-icon {
+    transform: rotate(180deg);
+}

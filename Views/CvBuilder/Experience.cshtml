@@ -41,81 +41,97 @@
                     }
                 </div>
             </div>
-
-            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Experience</h5>
+        }
+        @{
+            bool hasItems = Model.Experiences != null && Model.Experiences.Any();
+            string collapseClass = hasItems ? "collapse" : "collapse show";
+            string expandedState = hasItems ? "false" : "true";
         }
 
-        <div class="inputs-card">
-            <div class="row">
-                <!-- Job Title -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewExperience.JobTitle" class="form-label" style="color: var(--text-secondary);">Job Title</label>
+        <div class="d-flex justify-content-between align-items-center mb-3 toggle-header"
+             data-bs-toggle="collapse"
+             data-bs-target="#collapseExp"
+             aria-expanded="@expandedState"
+             style="cursor: pointer;">
 
-                    <div class="position-relative">
-                        <input asp-for="NewExperience.JobTitle" class="form-control input-with-icon" type="text" placeholder="Enter your job title" />
-                        <i class="fa-solid fa-briefcase custom-input-icon"></i>
-                        <span asp-validation-for="NewExperience.JobTitle" class="field-validation-error text-danger"></span>
+            <h5 style="color: var(--text-secondary); margin-bottom: 0;">Add New Experience</h5>
+            <i class="fa-solid fa-chevron-up toggle-icon" style="color: var(--text-secondary); transition: transform 0.3s ease;"></i>
+        </div>
+
+        <div class="@collapseClass" id="collapseExp">
+
+            <div class="inputs-card">
+                <div class="row">
+                    <!-- Job Title -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewExperience.JobTitle" class="form-label" style="color: var(--text-secondary);">Job Title</label>
+
+                        <div class="position-relative">
+                            <input asp-for="NewExperience.JobTitle" class="form-control input-with-icon" type="text" placeholder="Enter your job title" />
+                            <i class="fa-solid fa-briefcase custom-input-icon"></i>
+                            <span asp-validation-for="NewExperience.JobTitle" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Company -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewExperience.Company" class="form-label" style="color: var(--text-secondary);">Company</label>
+                    <!-- Company -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewExperience.Company" class="form-label" style="color: var(--text-secondary);">Company</label>
 
             
-                    <div class="position-relative">
-                        <input asp-for="NewExperience.Company" class="form-control input-with-icon" type="text" placeholder="Enter the company name" />
-                        <i class="fa-solid fa-building custom-input-icon"></i>
-                        <span asp-validation-for="NewExperience.Company" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Location -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewExperience.Location" class="form-label" style="color: var(--text-secondary);">Location</label>
-
-                    <div class="position-relative">
-                        <input asp-for="NewExperience.Location" class="form-control input-with-icon" type="text" placeholder="Enter the company location" />
-                        <i class="fa-solid fa-location-dot custom-input-icon"></i>
-                        <span asp-validation-for="NewExperience.Location" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Start Date -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewExperience.StartDate" class="form-label" style="color: var(--text-secondary);">Start Date</label>
-                    <div class="position-relative">
-                        <partial name="_CustomDatePicker" for="NewExperience.StartDate" />
-                        <span asp-validation-for="NewExperience.StartDate" class="field-validation-error text-danger"></span>
+                        <div class="position-relative">
+                            <input asp-for="NewExperience.Company" class="form-control input-with-icon" type="text" placeholder="Enter the company name" />
+                            <i class="fa-solid fa-building custom-input-icon"></i>
+                            <span asp-validation-for="NewExperience.Company" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- End Date -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewExperience.EndDate" class="form-label" style="color: var(--text-secondary);">End Date</label>
+                <div class="row">
+                    <!-- Location -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewExperience.Location" class="form-label" style="color: var(--text-secondary);">Location</label>
 
-                    <div class="position-relative">
-                        <partial name="_CustomDatePicker" for="NewExperience.EndDate" />
-                        <span asp-validation-for="NewExperience.EndDate" class="field-validation-error text-danger"></span>
+                        <div class="position-relative">
+                            <input asp-for="NewExperience.Location" class="form-control input-with-icon" type="text" placeholder="Enter the company location" />
+                            <i class="fa-solid fa-location-dot custom-input-icon"></i>
+                            <span asp-validation-for="NewExperience.Location" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Description -->
-                <div class="mb-3">
-                    <label asp-for="NewExperience.Description" class="form-label" style="color: var(--text-secondary);">Description</label>
-                    <div class="position-relative">
-                        <textarea asp-for="NewExperience.Description" class="form-control input-with-icon" placeholder="Enter a brief description about this job..." rows="5" style="resize: none; padding-top: 12px;"></textarea>
-                        <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
-                        <span asp-validation-for="NewExperience.Description" class="field-validation-error text-danger"></span>
+                <div class="row">
+                    <!-- Start Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewExperience.StartDate" class="form-label" style="color: var(--text-secondary);">Start Date</label>
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewExperience.StartDate" />
+                            <span asp-validation-for="NewExperience.StartDate" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
+
+                    <!-- End Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewExperience.EndDate" class="form-label" style="color: var(--text-secondary);">End Date</label>
+
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewExperience.EndDate" />
+                            <span asp-validation-for="NewExperience.EndDate" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label asp-for="NewExperience.Description" class="form-label" style="color: var(--text-secondary);">Description</label>
+                        <div class="position-relative">
+                            <textarea asp-for="NewExperience.Description" class="form-control input-with-icon" placeholder="Enter a brief description about this job..." rows="5" style="resize: none; padding-top: 12px;"></textarea>
+                            <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
+                            <span asp-validation-for="NewExperience.Description" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                        Save
+                    </button>
                 </div>
-                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
-                    Save
-                </button>
             </div>
         </div>
 

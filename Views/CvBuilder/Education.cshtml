@@ -42,59 +42,76 @@
                     }
                 </div>
             </div>
-
-            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Degree</h5>
         }
 
-        <div class="inputs-card">
-        <div class="row">
-            <!-- Degree -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="NewEducation.Degree" class="form-label" style="color: var(--text-secondary);">Degree</label>
-            
-                <div class="position-relative">
-                    <input asp-for="NewEducation.Degree" class="form-control input-with-icon" type="text" placeholder="Enter your degree" />
-                    <i class="fa-solid fa-graduation-cap custom-input-icon"></i>
-                    <span asp-validation-for="NewEducation.Degree" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
+        @{
+            bool hasItems = Model.Educations != null && Model.Educations.Any();
+            string collapseClass = hasItems ? "collapse" : "collapse show";
+            string expandedState = hasItems ? "false" : "true";
+        }
 
-            <!-- Major -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="NewEducation.Major" class="form-label" style="color: var(--text-secondary);">Major</label>
-            
-                <div class="position-relative">
-                    <input asp-for="NewEducation.Major" class="form-control input-with-icon" type="text" placeholder="Enter your major" />
-                    <i class="fa-solid fa-book custom-input-icon"></i>
-                    <span asp-validation-for="NewEducation.Major" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-3 toggle-header"
+             data-bs-toggle="collapse"
+             data-bs-target="#collapseEdu"
+             aria-expanded="@expandedState"
+             style="cursor: pointer;">
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 0;">Add New Education</h5>
+            <i class="fa-solid fa-chevron-up toggle-icon" style="color: var(--text-secondary); transition: transform 0.3s ease;"></i>
         </div>
 
-        <div class="row">
-            <!-- Institution -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="NewEducation.Institution" class="form-label" style="color: var(--text-secondary);">Institution</label>
-                
-                <div class="position-relative">
-                    <input asp-for="NewEducation.Institution" class="form-control input-with-icon" type="text" placeholder="Enter the institution name" />
-                    <i class="fa-solid fa-building-columns custom-input-icon"></i>
-                    <span asp-validation-for="NewEducation.Institution" class="field-validation-error text-danger"></span>
-                </div>
-            </div>
+        <div class="@collapseClass" id="collapseEdu">
 
-            <!-- Graduation Date -->
-            <div class="col-md-6 mb-3">
-                <label asp-for="NewEducation.GradDate" class="form-label" style="color: var(--text-secondary);">Graduation Date</label>
-                <div class="position-relative">
-                    <partial name="_CustomDatePicker" for="NewEducation.GradDate"/>
-                    <span asp-validation-for="NewEducation.GradDate" class="field-validation-error text-danger"></span>
+            <div class="inputs-card">
+                <div class="row">
+                    <!-- Degree -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewEducation.Degree" class="form-label" style="color: var(--text-secondary);">Degree</label>
+
+                        <div class="position-relative">
+                            <input asp-for="NewEducation.Degree" class="form-control input-with-icon" type="text" placeholder="Enter your degree" />
+                            <i class="fa-solid fa-graduation-cap custom-input-icon"></i>
+                            <span asp-validation-for="NewEducation.Degree" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Major -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewEducation.Major" class="form-label" style="color: var(--text-secondary);">Major</label>
+
+                        <div class="position-relative">
+                            <input asp-for="NewEducation.Major" class="form-control input-with-icon" type="text" placeholder="Enter your major" />
+                            <i class="fa-solid fa-book custom-input-icon"></i>
+                            <span asp-validation-for="NewEducation.Major" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Institution -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewEducation.Institution" class="form-label" style="color: var(--text-secondary);">Institution</label>
+
+                        <div class="position-relative">
+                            <input asp-for="NewEducation.Institution" class="form-control input-with-icon" type="text" placeholder="Enter the institution name" />
+                            <i class="fa-solid fa-building-columns custom-input-icon"></i>
+                            <span asp-validation-for="NewEducation.Institution" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Graduation Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewEducation.GradDate" class="form-label" style="color: var(--text-secondary);">Graduation Date</label>
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewEducation.GradDate" />
+                            <span asp-validation-for="NewEducation.GradDate" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                        Save
+                    </button>
                 </div>
             </div>
-                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
-                    Save
-                </button>
-        </div>
         </div>
         <!-- Navigation Buttons -->
         <div class="nav-buttons d-flex justify-content-between mt-4">

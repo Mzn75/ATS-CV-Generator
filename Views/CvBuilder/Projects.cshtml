@@ -40,67 +40,83 @@
                     }
                 </div>
             </div>
-
-            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Project</h5>
+        }
+        @{
+            bool hasItems = Model.Projects != null && Model.Projects.Any();
+            string collapseClass = hasItems ? "collapse" : "collapse show";
+            string expandedState = hasItems ? "false" : "true";
         }
 
-        <div class="inputs-card">
-            <div class="row">
-                <!-- Project Name -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewProject.ProjectName" class="form-label" style="color: var(--text-secondary);">Project Name</label>
-                    <div class="position-relative">
-                        <input asp-for="NewProject.ProjectName" class="form-control input-with-icon" type="text" placeholder="Enter your project name" />
-                        <i class="fa-solid fa-folder-open custom-input-icon"></i>
-                        <span asp-validation-for="NewProject.ProjectName" class="field-validation-error text-danger"></span>
+        <div class="d-flex justify-content-between align-items-center mb-3 toggle-header"
+             data-bs-toggle="collapse"
+             data-bs-target="#collapseProject"
+             aria-expanded="@expandedState"
+             style="cursor: pointer;">
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 0;">Add New Project</h5>
+            <i class="fa-solid fa-chevron-up toggle-icon" style="color: var(--text-secondary); transition: transform 0.3s ease;"></i>
+        </div>
+
+        <div class="@collapseClass" id="collapseProject">
+
+            <div class="inputs-card">
+                <div class="row">
+                    <!-- Project Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewProject.ProjectName" class="form-label" style="color: var(--text-secondary);">Project Name</label>
+                        <div class="position-relative">
+                            <input asp-for="NewProject.ProjectName" class="form-control input-with-icon" type="text" placeholder="Enter your project name" />
+                            <i class="fa-solid fa-folder-open custom-input-icon"></i>
+                            <span asp-validation-for="NewProject.ProjectName" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Technologies -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewProject.Technologies" class="form-label" style="color: var(--text-secondary);">Technologies</label>
+                        <div class="position-relative">
+                            <input asp-for="NewProject.Technologies" class="form-control input-with-icon" type="text" placeholder="Enter techs you used" />
+                            <i class="fa-solid fa-code custom-input-icon"></i>
+                            <span asp-validation-for="NewProject.Technologies" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Technologies -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewProject.Technologies" class="form-label" style="color: var(--text-secondary);">Technologies</label>
-                    <div class="position-relative">
-                        <input asp-for="NewProject.Technologies" class="form-control input-with-icon" type="text" placeholder="Enter techs you used" />
-                        <i class="fa-solid fa-code custom-input-icon"></i>
-                        <span asp-validation-for="NewProject.Technologies" class="field-validation-error text-danger"></span>
+                <div class="row">
+                    <!-- Start Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewProject.StartDate" class="form-label" style="color: var(--text-secondary);">Start Date</label>
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewProject.StartDate" />
+                            <span asp-validation-for="NewProject.StartDate" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewProject.EndDate" class="form-label" style="color: var(--text-secondary);">End Date</label>
+
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewProject.EndDate" />
+                            <span asp-validation-for="NewProject.EndDate" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <!-- Start Date -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewProject.StartDate" class="form-label" style="color: var(--text-secondary);">Start Date</label>
-                    <div class="position-relative">
-                        <partial name="_CustomDatePicker" for="NewProject.StartDate" />
-                        <span asp-validation-for="NewProject.StartDate" class="field-validation-error text-danger"></span>
+                <div class="row">
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label asp-for="NewProject.Description" class="form-label" style="color: var(--text-secondary);">Description</label>
+                        <div class="position-relative">
+                            <textarea asp-for="NewProject.Description" class="form-control input-with-icon" placeholder="Describe what you built and your role..." rows="5" style="resize: none; padding-top: 12px;"></textarea>
+                            <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
+                            <span asp-validation-for="NewProject.Description" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
+                    <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                        Save
+                    </button>
                 </div>
-
-                <!-- End Date -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewProject.EndDate" class="form-label" style="color: var(--text-secondary);">End Date</label>
-
-                    <div class="position-relative">
-                        <partial name="_CustomDatePicker" for="NewProject.EndDate" />
-                        <span asp-validation-for="NewProject.EndDate" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Description -->
-                <div class="mb-3">
-                    <label asp-for="NewProject.Description" class="form-label" style="color: var(--text-secondary);">Description</label>
-                    <div class="position-relative">
-                        <textarea asp-for="NewProject.Description" class="form-control input-with-icon" placeholder="Describe what you built and your role..." rows="5" style="resize: none; padding-top: 12px;"></textarea>
-                        <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
-                        <span asp-validation-for="NewProject.Description" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
-                    Save
-                </button>
             </div>
         </div>
 

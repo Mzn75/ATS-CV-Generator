@@ -46,61 +46,77 @@
                     }
                 </div>
             </div>
-
-            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Certificate</h5>
+        }
+        @{
+            bool hasItems = Model.Certificates != null && Model.Certificates.Any();
+            string collapseClass = hasItems ? "collapse" : "collapse show";
+            string expandedState = hasItems ? "false" : "true";
         }
 
-        <div class="inputs-card">
-            <div class="row">
-                <!-- Certificate Name -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewCertificate.Name" class="form-label" style="color: var(--text-secondary);">Certificate Name</label>
-                    <div class="position-relative">
-                        <input asp-for="NewCertificate.Name" class="form-control input-with-icon" type="text" placeholder="e.g. Python Fundamentals" />
-                        <i class="fa-solid fa-award custom-input-icon"></i>
-                        <span asp-validation-for="NewCertificate.Name" class="field-validation-error text-danger"></span>
+        <div class="d-flex justify-content-between align-items-center mb-3 toggle-header"
+             data-bs-toggle="collapse"
+             data-bs-target="#collapseCertificate"
+             aria-expanded="@expandedState"
+             style="cursor: pointer;">
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 0;">Add New Certificate</h5>
+            <i class="fa-solid fa-chevron-up toggle-icon" style="color: var(--text-secondary); transition: transform 0.3s ease;"></i>
+        </div>
+
+
+        <div class="@collapseClass" id="collapseCertificate">
+            <div class="inputs-card">
+                <div class="row">
+                    <!-- Certificate Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewCertificate.Name" class="form-label" style="color: var(--text-secondary);">Certificate Name</label>
+                        <div class="position-relative">
+                            <input asp-for="NewCertificate.Name" class="form-control input-with-icon" type="text" placeholder="e.g. Python Fundamentals" />
+                            <i class="fa-solid fa-award custom-input-icon"></i>
+                            <span asp-validation-for="NewCertificate.Name" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Issuing Organization -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewCertificate.Issuer" class="form-label" style="color: var(--text-secondary);">Issuing Organization</label>
+                        <div class="position-relative">
+                            <input asp-for="NewCertificate.Issuer" class="form-control input-with-icon" type="text" placeholder="e.g. Huawei, Google, AWS" />
+                            <i class="fa-solid fa-building-columns custom-input-icon"></i>
+                            <span asp-validation-for="NewCertificate.Issuer" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Issuing Organization -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewCertificate.Issuer" class="form-label" style="color: var(--text-secondary);">Issuing Organization</label>
-                    <div class="position-relative">
-                        <input asp-for="NewCertificate.Issuer" class="form-control input-with-icon" type="text" placeholder="e.g. Huawei, Google, AWS" />
-                        <i class="fa-solid fa-building-columns custom-input-icon"></i>
-                        <span asp-validation-for="NewCertificate.Issuer" class="field-validation-error text-danger"></span>
+                <div class="row">
+                    <!-- Date Earned -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewCertificate.IssueDate" class="form-label" style="color: var(--text-secondary);">Date Earned</label>
+                        <div class="position-relative">
+                            <partial name="_CustomDatePicker" for="NewCertificate.IssueDate" />
+                            <i class="fa-solid fa-calendar-days custom-input-icon"></i>
+                            <span asp-validation-for="NewCertificate.IssueDate" class="field-validation-error text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Credential URL -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NewCertificate.CredentialUrl" class="form-label" style="color: var(--text-secondary);">Credential URL</label>
+                        <div class="position-relative">
+                            <input asp-for="NewCertificate.CredentialUrl" class="form-control input-with-icon" type="url" placeholder="https://..." />
+                            <i class="fa-solid fa-link custom-input-icon"></i>
+                            <span asp-validation-for="NewCertificate.CredentialUrl" class="field-validation-error text-danger"></span>
+                        </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                        Save
+                    </button>
+                </div>
+
             </div>
-
-            <div class="row">
-                <!-- Date Earned -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewCertificate.IssueDate" class="form-label" style="color: var(--text-secondary);">Date Earned</label>
-                    <div class="position-relative">
-                        <partial name="_CustomDatePicker" for="NewCertificate.IssueDate" />
-                        <i class="fa-solid fa-calendar-days custom-input-icon"></i>
-                        <span asp-validation-for="NewCertificate.IssueDate" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-
-                <!-- Credential URL -->
-                <div class="col-md-6 mb-3">
-                    <label asp-for="NewCertificate.CredentialUrl" class="form-label" style="color: var(--text-secondary);">Credential URL</label>
-                    <div class="position-relative">
-                        <input asp-for="NewCertificate.CredentialUrl" class="form-control input-with-icon" type="url" placeholder="https://..." />
-                        <i class="fa-solid fa-link custom-input-icon"></i>
-                        <span asp-validation-for="NewCertificate.CredentialUrl" class="field-validation-error text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
-                    Save
-                </button>
-            </div>
-            
         </div>
 
         <!-- Navigation Buttons -->
@@ -111,9 +127,9 @@
                 <i class="fa-solid fa-arrow-left me-2"></i> Projects
             </a>
 
-            <!-- Finish -->
+            <!-- Next -->
             <button type="submit" name="actionType" value="next" class="btn btn-nav btn-nav-next px-5 py-2">
-                Finish <i class="fa-solid fa-check ms-2"></i>
+                Next: Skills 
             </button>
         </div>
     </form>
