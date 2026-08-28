@@ -34,7 +34,7 @@
                             <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
                                 <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@proj.ProjectName</h5>
                                 <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@proj.Technologies</p>
-                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">@proj.DateRange</p>
+                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">@proj.StartDate - @proj.EndDate</p>
                             </div>
                         </div>
                     }
@@ -68,13 +68,22 @@
             </div>
 
             <div class="row">
-                <!-- Date Range -->
+                <!-- Start Date -->
                 <div class="col-md-6 mb-3">
-                    <label asp-for="NewProject.DateRange" class="form-label" style="color: var(--text-secondary);">Date Range</label>
+                    <label asp-for="NewProject.StartDate" class="form-label" style="color: var(--text-secondary);">Start Date</label>
                     <div class="position-relative">
-                        <input asp-for="NewProject.DateRange" class="form-control input-with-icon" type="text" placeholder="e.g. Jan 2024 – Mar 2024" />
-                        <i class="fa-solid fa-calendar-days custom-input-icon"></i>
-                        <span asp-validation-for="NewProject.DateRange" class="field-validation-error text-danger"></span>
+                        <partial name="_CustomDatePicker" for="NewProject.StartDate" />
+                        <span asp-validation-for="NewProject.StartDate" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- End Date -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewProject.EndDate" class="form-label" style="color: var(--text-secondary);">End Date</label>
+
+                    <div class="position-relative">
+                        <partial name="_CustomDatePicker" for="NewProject.EndDate" />
+                        <span asp-validation-for="NewProject.EndDate" class="field-validation-error text-danger"></span>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,8 @@ namespace ATS_CV_Generator.Models
 
         public string ProjectName { get; set; } = string.Empty;
         public string Technologies { get; set; } = string.Empty;
-        public string DateRange { get; set; } = string.Empty;
+        public string StartDate { get; set; } = string.Empty;
+        public string EndDate { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
         [ForeignKey("CvDraft")]
