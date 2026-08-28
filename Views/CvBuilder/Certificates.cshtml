@@ -78,7 +78,7 @@
                 <div class="col-md-6 mb-3">
                     <label asp-for="NewCertificate.IssueDate" class="form-label" style="color: var(--text-secondary);">Date Earned</label>
                     <div class="position-relative">
-                        <input asp-for="NewCertificate.IssueDate" class="form-control input-with-icon" type="text" placeholder="e.g. August 2026" />
+                        <partial name="_CustomDatePicker" for="NewCertificate.IssueDate" />
                         <i class="fa-solid fa-calendar-days custom-input-icon"></i>
                         <span asp-validation-for="NewCertificate.IssueDate" class="field-validation-error text-danger"></span>
                     </div>
@@ -95,9 +95,12 @@
                 </div>
             </div>
 
-            <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
-                Save
-            </button>
+            <div class="row">
+                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                    Save
+                </button>
+            </div>
+            
         </div>
 
         <!-- Navigation Buttons -->
