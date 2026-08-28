@@ -205,5 +205,64 @@ namespace ATS_CV_Generator.Controllers
             // Refreshes the page if they clicked "Save & Add Another"
             return RedirectToAction("Experience");
         }
+
+        // 4.1. Projects GET
+        [HttpGet]
+        public async Task<IActionResult> Projects()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var draft = await _context.CvDrafts
+                .Include(d => d.Projects)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
+        }
+
+        // 4.2. Projects POST
+        [HttpPost]
+        public async Task<IActionResult> AddProject(CvDraft model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var draft = await _context.CvDrafts
+                .Include(d => d.Projects)
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("Projects");
+
+            string actionType = Request.Form["actionType"];
+
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewProject?.ProjectName);
+
+            if (actionType == "next" && isFormEmpty)
+            {
+                return RedirectToAction("Certificates");
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model.NewProject);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Projects", draft);
+            }
+
+            if (model.NewProject != null)
+            {
+                model.NewProject.CvDraftId = model.Id;
+                model.NewProject.UserId = user.Id;
+                _context.Projects.Add(model.NewProject);
+                await _context.SaveChangesAsync();
+            }
+
+            if (actionType == "next")
+            {
+                return RedirectToAction("Certificates");
+            }
+
+            return RedirectToAction("Projects");
+        }
     }
 }

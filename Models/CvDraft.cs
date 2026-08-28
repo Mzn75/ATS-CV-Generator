@@ -44,6 +44,9 @@ namespace ATS_CV_Generator.Models
         // 4. Projects
         public List<ProjectItem> Projects { get; set; } = new List<ProjectItem>();
 
+        [NotMapped]
+        public ProjectItem NewProject { get; set; } = new ProjectItem();
+
         // 6. Certificates
         public List<Certificates> Certificates { get; set; } = new List<Certificates>();
     }
