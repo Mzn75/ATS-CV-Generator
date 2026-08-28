@@ -9,10 +9,10 @@
     <div class="progress-wrapper mb-5">
         <div class="d-flex justify-content-between mb-2" style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">
             <span>PROGRESS</span>
-            <span>60%</span>
+            <span>50%</span>
         </div>
         <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
-            <div class="progress-bar" role="progressbar" style="width: 60%; background-color: var(--secondary-teal, --accent-coral);"></div>
+            <div class="progress-bar" role="progressbar" style="width: 50%; background-color: var(--secondary-teal, --accent-coral);"></div>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
 
                     <div class="position-relative">
                         <input asp-for="NewExperience.JobTitle" class="form-control input-with-icon" type="text" placeholder="Enter your job title" />
-                        <i class="fa-solid fa-graduation-cap custom-input-icon"></i>
+                        <i class="fa-solid fa-briefcase custom-input-icon"></i>
                         <span asp-validation-for="NewExperience.JobTitle" class="field-validation-error text-danger"></span>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             
                     <div class="position-relative">
                         <input asp-for="NewExperience.Company" class="form-control input-with-icon" type="text" placeholder="Enter the company name" />
-                        <i class="fa-solid fa-book custom-input-icon"></i>
+                        <i class="fa-solid fa-building custom-input-icon"></i>
                         <span asp-validation-for="NewExperience.Company" class="field-validation-error text-danger"></span>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
 
                     <div class="position-relative">
                         <input asp-for="NewExperience.Location" class="form-control input-with-icon" type="text" placeholder="Enter the company location" />
-                        <i class="fa-solid fa-building-columns custom-input-icon"></i>
+                        <i class="fa-solid fa-location-dot custom-input-icon"></i>
                         <span asp-validation-for="NewExperience.Location" class="field-validation-error text-danger"></span>
                     </div>
                 </div>
