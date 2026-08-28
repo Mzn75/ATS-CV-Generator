@@ -1,0 +1,146 @@
+@model ATS_CV_Generator.Models.CvDraft
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<div class="builder-container mx-auto" style="max-width: 700px; margin-top: 40px;">
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrapper mb-5">
+        <div class="d-flex justify-content-between mb-2" style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">
+            <span>PROGRESS</span>
+            <span>80%</span>
+        </div>
+        <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
+            <div class="progress-bar" role="progressbar" style="width: 80%; background-color: var(--secondary-teal, --accent-coral);"></div>
+        </div>
+    </div>
+
+    <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">4. Projects</h2>
+
+    <!-- THE FORM -->
+    <form asp-action="AddProject" method="post" id="form">
+        <!-- Hidden ID so Entity Framework knows which draft to update -->
+        <input type="hidden" asp-for="Id" />
+
+        @if (Model.Projects != null && Model.Projects.Any())
+        {
+            <div class="mb-4">
+                <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Projects</h5>
+                <div class="row">
+                    @foreach (var proj in Model.Projects)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@proj.ProjectName</h5>
+                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@proj.Technologies</p>
+                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">@proj.DateRange</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Add Another Project</h5>
+        }
+
+        <div class="inputs-card">
+            <div class="row">
+                <!-- Project Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewProject.ProjectName" class="form-label" style="color: var(--text-secondary);">Project Name</label>
+                    <div class="position-relative">
+                        <input asp-for="NewProject.ProjectName" class="form-control input-with-icon" type="text" placeholder="Enter your project name" />
+                        <i class="fa-solid fa-folder-open custom-input-icon"></i>
+                        <span asp-validation-for="NewProject.ProjectName" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Technologies -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewProject.Technologies" class="form-label" style="color: var(--text-secondary);">Technologies</label>
+                    <div class="position-relative">
+                        <input asp-for="NewProject.Technologies" class="form-control input-with-icon" type="text" placeholder="e.g. React, Node.js, MongoDB" />
+                        <i class="fa-solid fa-code custom-input-icon"></i>
+                        <span asp-validation-for="NewProject.Technologies" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Date Range -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NewProject.DateRange" class="form-label" style="color: var(--text-secondary);">Date Range</label>
+                    <div class="position-relative">
+                        <input asp-for="NewProject.DateRange" class="form-control input-with-icon" type="text" placeholder="e.g. Jan 2024 – Mar 2024" />
+                        <i class="fa-solid fa-calendar-days custom-input-icon"></i>
+                        <span asp-validation-for="NewProject.DateRange" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Description -->
+                <div class="mb-3">
+                    <label asp-for="NewProject.Description" class="form-label" style="color: var(--text-secondary);">Description</label>
+                    <div class="position-relative">
+                        <textarea asp-for="NewProject.Description" class="form-control input-with-icon" placeholder="Describe what you built and your role..." rows="5" style="resize: none; padding-top: 12px;"></textarea>
+                        <i class="fa-solid fa-align-left custom-input-icon" style="top:49px"></i>
+                        <span asp-validation-for="NewProject.Description" class="field-validation-error text-danger"></span>
+                    </div>
+                </div>
+                <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons d-flex justify-content-between mt-4">
+            <!-- Back -->
+            <a asp-controller="CvBuilder" asp-action="Experience"
+               class="btn btn-nav btn-nav-back px-5 py-2">
+                <i class="fa-solid fa-arrow-left me-2"></i> Experience
+            </a>
+
+            <!-- Next -->
+            <button type="submit" name="actionType" value="next" class="btn btn-nav btn-nav-next px-5 py-2">
+                Next: Certificates <i class="fa-solid fa-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form");
+            if (!form) return;
+
+            const inputs = form.querySelectorAll("input, textarea");
+
+            inputs.forEach(input => {
+                if (input.type === 'hidden' || !input.name) return;
+
+                if (!input.value) {
+                    const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                }
+
+                input.addEventListener("input", function() {
+                    sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                });
+            });
+
+            form.addEventListener("submit", function() {
+                inputs.forEach(input => {
+                    if (input.name) {
+                        sessionStorage.removeItem('cvDraft_' + input.name);
+                    }
+                });
+            });
+        });
+    </script>
+}
