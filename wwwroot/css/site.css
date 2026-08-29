@@ -721,3 +721,49 @@ input[type="password"]::-ms-clear {
 .toggle-header[aria-expanded="false"] .toggle-icon {
     transform: rotate(180deg);
 }
+
+.custom-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background: var(--surface-dark, #121C29);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+    .custom-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+.dropdown-item {
+    padding: 10px 15px;
+    color: var(--text-primary, #F8F9FB);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+    .dropdown-item:hover {
+        background: var(--navy-hover, #142A3F);
+        color: var(--secondary-teal, #2A9D8F);
+    }
+/* Custom Scrollbar for the dropdown */
+.custom-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
