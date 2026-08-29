@@ -298,7 +298,7 @@ namespace ATS_CV_Generator.Controllers
 
             if (actionType == "next" && isFormEmpty)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Skills");
             }
 
             ModelState.Clear();
@@ -318,10 +318,73 @@ namespace ATS_CV_Generator.Controllers
 
             if (actionType == "next")
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Skills");
             }
 
             return RedirectToAction("Certificates");
+        }
+
+        // 5.1. Skills GET
+        [HttpGet]
+        public async Task<IActionResult> Skills()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            ViewBag.StandardSkills = await _context.PreDefinedSkills
+                .OrderBy(s => s.Name)
+                .Select(s => s.Name)
+                .ToListAsync();
+
+            var draft = await _context.CvDrafts
+                .Include(d => d.Skills)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
+        }
+
+        // 5.2. Skills POST
+        [HttpPost]
+        public async Task<IActionResult> AddSkill(CvDraft model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var draft = await _context.CvDrafts
+                .Include(d => d.Skills)
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("Skills");
+
+            string actionType = Request.Form["actionType"];
+
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewSkill?.Name);
+
+            if (actionType == "next" && isFormEmpty)
+            {
+                return RedirectToAction("Result");
+            }
+
+            ModelState.Clear();
+            TryValidateModel(model.NewSkill);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Skills", draft);
+            }
+
+            if (model.NewSkill != null)
+            {
+                model.NewSkill.CvDraftId = model.Id;
+                _context.Skills.Add(model.NewSkill);
+                await _context.SaveChangesAsync();
+            }
+
+            if (actionType == "next")
+            {
+                return RedirectToAction("Result");
+            }
+
+            return RedirectToAction("Skills");
         }
     }
 }

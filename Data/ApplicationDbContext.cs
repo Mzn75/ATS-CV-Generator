@@ -16,6 +16,7 @@ namespace ATS_CV_Generator.Data
         public DbSet<CvDraft> CvDrafts { get; set; }
         public DbSet<Certificates> Certificates { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<PreDefinedSkills> PreDefinedSkills { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
