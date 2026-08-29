@@ -5,8 +5,10 @@ namespace ATS_CV_Generator.Models
 {
     public class Certificates
     {
-        [Key]
         public int Id { get; set; }
+
+        public string UserId { get; set; } = string.Empty;
+        public virtual ApplicationUser? User { get; set; }
 
         [Required(ErrorMessage = "Certificate name is required")]
         [Display(Name = "Certificate Name", Prompt = "e.g., Python Fundanmentals")]

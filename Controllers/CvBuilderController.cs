@@ -324,7 +324,7 @@ namespace ATS_CV_Generator.Controllers
             return RedirectToAction("Certificates");
         }
 
-        // 5.1. Skills GET
+        // 6.1. Skills GET
         [HttpGet]
         public async Task<IActionResult> Skills()
         {
@@ -332,7 +332,6 @@ namespace ATS_CV_Generator.Controllers
 
             ViewBag.StandardSkills = await _context.PreDefinedSkills
                 .OrderBy(s => s.Name)
-                .Select(s => s.Name)
                 .ToListAsync();
 
             var draft = await _context.CvDrafts
@@ -344,7 +343,7 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
-        // 5.2. Skills POST
+        // 6.2. Skills POST
         [HttpPost]
         public async Task<IActionResult> AddSkill(CvDraft model)
         {
@@ -369,12 +368,17 @@ namespace ATS_CV_Generator.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.StandardSkills = await _context.PreDefinedSkills
+                    .OrderBy(s => s.Name)
+                    .ToListAsync();
+
                 return View("Skills", draft);
             }
 
             if (model.NewSkill != null)
             {
                 model.NewSkill.CvDraftId = model.Id;
+                model.NewSkill.UserId = user.Id;
                 _context.Skills.Add(model.NewSkill);
                 await _context.SaveChangesAsync();
             }
