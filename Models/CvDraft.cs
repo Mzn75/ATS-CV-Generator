@@ -53,9 +53,9 @@ namespace ATS_CV_Generator.Models
         [NotMapped]
         public Certificates NewCertificate { get; set; } = new Certificates();
 
-        public ICollection<Skill> Skills { get; set; } = new List<Skill>();
+        public List<Skill> Skills { get; set; } = new List<Skill>();
 
         [NotMapped]
-        public Skill NewSkill { get; set; }
+        public Skill NewSkill { get; set; } = new Skill();
     }
 }

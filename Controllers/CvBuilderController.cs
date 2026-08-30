@@ -312,6 +312,7 @@ namespace ATS_CV_Generator.Controllers
             if (model.NewCertificate != null)
             {
                 model.NewCertificate.CvDraftId = model.Id;
+                model.NewCertificate.UserId = user.Id;
                 _context.Certificates.Add(model.NewCertificate);
                 await _context.SaveChangesAsync();
             }
@@ -356,7 +357,8 @@ namespace ATS_CV_Generator.Controllers
 
             string actionType = Request.Form["actionType"];
 
-            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewSkill?.Name);
+            bool isFormEmpty = string.IsNullOrWhiteSpace(model.NewSkill?.Name) &&
+                string.IsNullOrWhiteSpace(model.NewSkill?.Category);
 
             if (actionType == "next" && isFormEmpty)
             {
