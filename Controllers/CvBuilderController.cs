@@ -49,18 +49,18 @@ namespace ATS_CV_Generator.Controllers
 
             if (existingDraft == null)
             {
-                // CREATE: Save their very first draft
                 model.UserId = user.Id;
                 model.LastModified = System.DateTime.Now;
                 _context.CvDrafts.Add(model);
             }
             else
             {
-                // UPDATE: Overwrite the existing draft with new form data
                 existingDraft.FullName = model.FullName;
                 existingDraft.Email = model.Email;
                 existingDraft.PhoneNumber = model.PhoneNumber;
                 existingDraft.JobTitle = model.JobTitle;
+                existingDraft.Country = model.Country;
+                existingDraft.City = model.City;
                 existingDraft.ProfessionalSummary = model.ProfessionalSummary;
                 existingDraft.LastModified = System.DateTime.Now;
             }
@@ -136,6 +136,25 @@ namespace ATS_CV_Generator.Controllers
             }
 
             // Refreshes the page if they clicked "Save & Add Another"
+            return RedirectToAction("Education");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEducation(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Find the education entry and ensure it belongs to the logged-in user
+            var edu = await _context.Educations
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (edu != null)
+            {
+                _context.Educations.Remove(edu);
+                await _context.SaveChangesAsync();
+            }
+
+            // Refresh the page to show the updated list
             return RedirectToAction("Education");
         }
 
@@ -391,6 +410,25 @@ namespace ATS_CV_Generator.Controllers
             }
 
             return RedirectToAction("Skills");
+        }
+
+        // 7. Result
+        [HttpGet]
+        public async Task<IActionResult> Result()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var draft = await _context.CvDrafts
+                .Include(d => d.Educations)
+                .Include(d => d.Experiences)
+                .Include(d => d.Projects)
+                .Include(d => d.Certificates)
+                .Include(d => d.Skills)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (draft == null) return RedirectToAction("PersonalInfo");
+
+            return View(draft);
         }
     }
 }

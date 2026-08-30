@@ -373,7 +373,7 @@ input[type="password"]::-ms-clear {
     font-weight: 800;
     font-size: 2rem;
     margin-bottom: 10px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Sora', sans-serif;
 }
 
 .dashboard-subtitle {
@@ -484,7 +484,7 @@ input[type="password"]::-ms-clear {
 /* User Greeting Styling */
 .user-greeting {
     color: #bdbecb;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Sora', sans-serif;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -797,3 +797,24 @@ input[type="password"]::-ms-clear {
     color: var(--secondary-teal, #2A9D8F);
     font-weight: 600;
 }
+
+.remove-btn {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary, #94A3B8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+    .remove-btn:hover {
+        background: rgba(230, 57, 70, 0.15);
+        border-color: #E63946;
+        color: #E63946;
+    }

@@ -15,35 +15,42 @@
             <div class="progress-bar" role="progressbar" style="width: 33%; background-color: var(--secondary-teal, --accent-coral);"></div>
         </div>
     </div>
-
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">2. Education</h2>
+
+    @if (Model.Educations != null && Model.Educations.Any())
+    {
+        <div class="saved-educations mb-4">
+            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Education</h5>
+            <div class="row">
+                @foreach (var edu in Model.Educations)
+                {
+                    <div class="col-md-6 mb-3">
+                        <div class="card p-3 h-100 d-flex flex-column" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+
+                            <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@edu.Degree</h5>
+                            <p style="color: var(--text-primary, #F8F9FB); margin-bottom: 5px;"><strong>@edu.Institution</strong></p>
+                            <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">Major: @edu.Major</p>
+                            <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 10px; font-size: 0.85rem;">
+                                <i class="fa-solid fa-calendar-days me-2"></i>Graduated: @edu.GradDate
+                            </p>
+
+                            <form asp-action="DeleteEducation" asp-controller="CvBuilder" method="post" style="margin-top: auto;">
+                                <input type="hidden" name="id" value="@edu.Id" />
+                                <button type="submit" onclick="return confirm('Remove this education entry?');" class="remove-btn">
+                                    <i class="fa-solid fa-xmark"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <!-- THE FORM -->
     <form asp-action="AddEducation" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
-
-        @if (Model.Educations != null && Model.Educations.Any())
-        {
-            <div class="saved-educations mb-4">
-                <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Education</h5>
-                <div class="row">
-                    @foreach (var edu in Model.Educations)
-                    {
-                        <div class="col-md-6 mb-3">
-                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
-                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@edu.Degree</h5>
-                                <p style="color: var(--text-primary, #F8F9FB); margin-bottom: 5px;"><strong>@edu.Institution</strong></p>
-                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">Major: @edu.Major</p>
-                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">
-                                    <i class="fa-solid fa-calendar-days me-2"></i>Graduated: @edu.GradDate
-                                </p>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-
         @{
             bool hasItems = Model.Educations != null && Model.Educations.Any();
             string collapseClass = hasItems ? "collapse" : "collapse show";
