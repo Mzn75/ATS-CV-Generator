@@ -225,6 +225,25 @@ namespace ATS_CV_Generator.Controllers
             return RedirectToAction("Experience");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteExperience(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Find the education entry and ensure it belongs to the logged-in user
+            var exp = await _context.Experiences
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (exp != null)
+            {
+                _context.Experiences.Remove(exp);
+                await _context.SaveChangesAsync();
+            }
+
+            // Refresh the page to show the updated list
+            return RedirectToAction("Experience");
+        }
+
         // 4.1. Projects GET
         [HttpGet]
         public async Task<IActionResult> Projects()
@@ -281,6 +300,25 @@ namespace ATS_CV_Generator.Controllers
                 return RedirectToAction("Certificates");
             }
 
+            return RedirectToAction("Projects");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProject(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Find the education entry and ensure it belongs to the logged-in user
+            var proj = await _context.Projects
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (proj != null)
+            {
+                _context.Projects.Remove(proj);
+                await _context.SaveChangesAsync();
+            }
+
+            // Refresh the page to show the updated list
             return RedirectToAction("Projects");
         }
 
@@ -341,6 +379,25 @@ namespace ATS_CV_Generator.Controllers
                 return RedirectToAction("Skills");
             }
 
+            return RedirectToAction("Certificates");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCertificate(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Find the education entry and ensure it belongs to the logged-in user
+            var cert = await _context.Certificates
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (cert != null)
+            {
+                _context.Certificates.Remove(cert);
+                await _context.SaveChangesAsync();
+            }
+
+            // Refresh the page to show the updated list
             return RedirectToAction("Certificates");
         }
 
@@ -409,6 +466,25 @@ namespace ATS_CV_Generator.Controllers
                 return RedirectToAction("Result");
             }
 
+            return RedirectToAction("Skills");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSkill(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Find the education entry and ensure it belongs to the logged-in user
+            var skl = await _context.Skills
+                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == user.Id);
+
+            if (skl != null)
+            {
+                _context.Skills.Remove(skl);
+                await _context.SaveChangesAsync();
+            }
+
+            // Refresh the page to show the updated list
             return RedirectToAction("Skills");
         }
 

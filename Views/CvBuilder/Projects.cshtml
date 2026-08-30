@@ -18,29 +18,37 @@
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">4. Projects</h2>
 
+    @if (Model.Projects != null && Model.Projects.Any())
+    {
+        <div class="mb-4">
+            <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Projects</h5>
+            <div class="row">
+                @foreach (var proj in Model.Projects)
+                {
+                    <div class="col-md-6 mb-3">
+                        <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+                            <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@proj.ProjectName</h5>
+                            <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@proj.Technologies</p>
+                            <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">@proj.StartDate - @proj.EndDate</p>
+
+                            <form asp-action="DeleteProject" asp-controller="CvBuilder" method="post" style="margin-top: auto;">
+                                <input type="hidden" name="id" value="@proj.Id" />
+                                <button type="submit" class="remove-btn">
+                                    <i class="fa-solid fa-xmark"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <!-- THE FORM -->
     <form asp-action="AddProject" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
-        @if (Model.Projects != null && Model.Projects.Any())
-        {
-            <div class="mb-4">
-                <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Projects</h5>
-                <div class="row">
-                    @foreach (var proj in Model.Projects)
-                    {
-                        <div class="col-md-6 mb-3">
-                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
-                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@proj.ProjectName</h5>
-                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 5px; font-size: 0.9rem;">@proj.Technologies</p>
-                                <p style="color: var(--text-secondary, #94A3B8); margin-bottom: 0; font-size: 0.85rem;">@proj.StartDate - @proj.EndDate</p>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
         @{
             bool hasItems = Model.Projects != null && Model.Projects.Any();
             string collapseClass = hasItems ? "collapse" : "collapse show";
