@@ -767,3 +767,33 @@ input[type="password"]::-ms-clear {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 4px;
 }
+
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--surface-dark, #121C29);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.skill-badge-category {
+    color: var(--text-primary, #F8F9FB);
+    font-weight: 700;
+}
+
+    .skill-badge-category::after {
+        content: "—";
+        margin-left: 6px;
+        color: var(--text-secondary);
+        font-weight: 400;
+    }
+
+.skill-badge-name {
+    color: var(--secondary-teal, #2A9D8F);
+    font-weight: 600;
+}

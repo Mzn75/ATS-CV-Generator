@@ -12,14 +12,14 @@
             <span>100%</span>
         </div>
         <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
-            <div class="progress-bar" role="progressbar" style="width: 100%; background-color: var(--secondary-teal, --accent-coral);"></div>
+            <div class="progress-bar" role="progressbar" style="width: 100%; background-color: var(--secondary-teal, #2A9D8F);"></div>
         </div>
     </div>
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">6. Skills</h2>
 
     <!-- THE FORM -->
-    <form asp-action="AddCertificate" method="post" id="form">
+    <form asp-action="AddSkill" method="post" id="form">
         <!-- Hidden ID so Entity Framework knows which draft to update -->
         <input type="hidden" asp-for="Id" />
 
@@ -27,15 +27,13 @@
         {
             <div class="mb-4">
                 <h5 style="color: var(--text-secondary); margin-bottom: 1rem;">Saved Skills</h5>
-                <div class="row">
+                <div class="d-flex flex-wrap gap-2">
                     @foreach (var skl in Model.Skills)
                     {
-                        <div class="col-md-6 mb-3">
-                            <div class="card p-3 h-100" style="background: var(--surface-dark, #121C29); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
-                                <p style="color: var(--text-primary, #F8F9FB); margin-bottom: 5px;"><strong>@skl.Category</strong></p>
-                                <h5 style="color: var(--secondary-teal, #2A9D8F); margin-bottom: 5px; font-weight: 600;">@skl.Name</h5>
-                            </div>
-                        </div>
+                        <span class="skill-badge">
+                            <span class="skill-badge-category">@skl.Category</span>
+                            <span class="skill-badge-name">@skl.Name</span>
+                        </span>
                     }
                 </div>
             </div>
@@ -73,29 +71,54 @@
 
                             <!-- The custom styled dropdown menu -->
                             <div class="custom-dropdown" id="categoryDropdown">
-                                <div class="dropdown-item">Programming Languages</div>
-                                <div class="dropdown-item">Frameworks & Libraries</div>
-                                <div class="dropdown-item">Databases</div>
-                                <div class="dropdown-item">Tools & Software</div>
-                                <div class="dropdown-item">Soft Skills</div>
-                                <div class="dropdown-item">Languages</div>
+                                @if (ViewBag.StandardSkills != null)
+                                {
+                                    var shownCategories = new HashSet<string>();
+
+                                    foreach (var skill in ViewBag.StandardSkills)
+                                    {
+                                        // Only render the category if it hasn't been added to the HashSet yet
+                                        if (!string.IsNullOrWhiteSpace(skill.Category) && shownCategories.Add(skill.Category))
+                                        {
+                                            <div class="dropdown-item">@skill.Category</div>
+                                        }
+                                    }
+                                }
                             </div>
+
+                            <span asp-validation-for="NewSkill.Category" class="field-validation-error text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row"> 
-                    <!-- Certificate Name -->
+                    <!-- Skill Name -->
                     <div class="mb-3">
                         <label asp-for="NewSkill.Name" class="form-label" style="color: var(--text-secondary);">Skill Name</label>
                         <div class="position-relative">
-                            <input asp-for="NewSkill.Name" class="form-control input-with-icon" type="text" placeholder="Enter your skill name" />
+
+                            <input asp-for="NewSkill.Name" id="nameInput" class="form-control input-with-icon" type="text" placeholder="Enter or choose your skill name" />
                             <i class="fa-solid fa-award custom-input-icon"></i>
+
+                            <!-- The visual dropdown arrow -->
+                            <i class="fa-solid fa-chevron-down position-absolute" id="nameArrow" style="right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; transition: transform 0.3s ease; cursor:pointer;"></i>
+
+                            <!-- The custom styled dropdown menu -->
+                            <div class="custom-dropdown" id="nameDropdown">
+                               
+                                @if (ViewBag.StandardSkills != null)
+                                {
+                                    foreach (var skill in ViewBag.StandardSkills)
+                                    {
+                                        <div class="dropdown-item" data-category="@skill.Category">@skill.Name</div>
+                                    }
+                                }
+
+                            </div>
+
                             <span asp-validation-for="NewSkill.Name" class="field-validation-error text-danger"></span>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
 
                 <div class="row">
                     <button type="submit" name="actionType" value="add" class="btn" style="background: var(--accent-coral)">
@@ -109,14 +132,14 @@
         <!-- Navigation Buttons -->
         <div class="nav-buttons d-flex justify-content-between mt-4">
             <!-- Back -->
-            <a asp-controller="CvBuilder" asp-action="Projects"
+            <a asp-controller="CvBuilder" asp-action="Certificates"
                class="btn btn-nav btn-nav-back px-5 py-2">
-                <i class="fa-solid fa-arrow-left me-2"></i> Projects
+                <i class="fa-solid fa-arrow-left me-2"></i> Certificates
             </a>
 
             <!-- Next -->
             <button type="submit" name="actionType" value="next" class="btn btn-nav btn-nav-next px-5 py-2">
-                Next: Skills
+                Finish
             </button>
         </div>
     </form>
@@ -125,85 +148,135 @@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+
+            // --- 1. Session Storage Logic (Keep as is) ---
             const form = document.getElementById("form");
-            if (!form) return;
+            if (form) {
+                const formInputs = form.querySelectorAll("input, textarea");
+                formInputs.forEach(input => {
+                    if (input.type === 'hidden' || !input.name) return;
 
-            const inputs = form.querySelectorAll("input, textarea");
-
-            inputs.forEach(input => {
-                if (input.type === 'hidden' || !input.name) return;
-
-                if (!input.value) {
-                    const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
-                    if (savedValue) {
-                        input.value = savedValue;
+                    if (!input.value) {
+                        const savedValue = sessionStorage.getItem('cvDraft_' + input.name);
+                        if (savedValue) input.value = savedValue;
                     }
-                }
 
-                input.addEventListener("input", function() {
-                    sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                    input.addEventListener("input", function() {
+                        sessionStorage.setItem('cvDraft_' + input.name, input.value);
+                    });
                 });
-            });
 
-            form.addEventListener("submit", function() {
-                inputs.forEach(input => {
-                    if (input.name) {
-                        sessionStorage.removeItem('cvDraft_' + input.name);
-                    }
+                form.addEventListener("submit", function() {
+                    formInputs.forEach(input => {
+                        if (input.name) sessionStorage.removeItem('cvDraft_' + input.name);
+                    });
                 });
-            });
-        });
-        document.addEventListener("DOMContentLoaded", function() {
-            const input = document.getElementById('categoryInput');
-            const dropdown = document.getElementById('categoryDropdown');
-            const items = document.querySelectorAll('.dropdown-item');
-            const arrow = document.getElementById('categoryArrow');
+            }
 
-            function openDropdown() {
+            // --- 2. Element Selectors ---
+            const categoryInput = document.getElementById('categoryInput');
+            const categoryDropdown = document.getElementById('categoryDropdown');
+            // FIX: Only get items inside the Category dropdown
+            const categoryItems = categoryDropdown.querySelectorAll('.dropdown-item');
+            const categoryArrow = document.getElementById('categoryArrow');
+
+            const nameInput = document.getElementById('nameInput');
+            const nameDropdown = document.getElementById('nameDropdown');
+            // FIX: Only get items inside the Name dropdown
+            const nameItems = nameDropdown.querySelectorAll('.dropdown-item');
+            const nameArrow = document.getElementById('nameArrow');
+
+            // --- 3. Shared Toggle Functions ---
+            function openDropdown(dropdown, arrow) {
                 dropdown.classList.add('show');
-                arrow.style.transform = 'translateY(-50%) rotate(180deg)';
+                if (arrow) arrow.style.transform = 'translateY(-50%) rotate(180deg)';
             }
 
-            function closeDropdown() {
+            function closeDropdown(dropdown, arrow) {
                 dropdown.classList.remove('show');
-                arrow.style.transform = 'translateY(-50%) rotate(0deg)';
+                if (arrow) arrow.style.transform = 'translateY(-50%) rotate(0deg)';
             }
 
-            // 1. Open menu when user clicks the input
-            input.addEventListener('focus', openDropdown);
+            // --- 4. Cross-Filtering Logic (Category -> Name) ---
+            function filterSkillsByCategory() {
+                const selectedCategory = categoryInput.value.toLowerCase().trim();
 
-            // 2. Filter the list as the user types
-            input.addEventListener('input', function() {
-                openDropdown(); // Keep it open while typing
-                const filterText = input.value.toLowerCase();
+                nameItems.forEach(item => {
+                    const itemCategory = (item.getAttribute('data-category') || "").toLowerCase();
 
-                items.forEach(item => {
-                    const itemText = item.textContent.toLowerCase();
-                    // Hide the item if it doesn't match the search text
-                    if (itemText.includes(filterText)) {
+                    if (selectedCategory === "" || itemCategory === selectedCategory) {
                         item.style.display = 'block';
+                        item.classList.remove('category-hidden');
                     } else {
                         item.style.display = 'none';
+                        item.classList.add('category-hidden');
                     }
                 });
-            });
+            }
 
-            // 3. Close menu if user clicks away
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    closeDropdown();
-                }
-            });
+            // --- 5. Category Input Events ---
+            categoryInput.addEventListener('focus', () => openDropdown(categoryDropdown, categoryArrow));
 
-            // 4. Handle clicking a predefined option
-            items.forEach(item => {
-                item.addEventListener('click', () => {
-                    input.value = item.textContent;
-                    closeDropdown();
+            categoryInput.addEventListener('input', function() {
+                openDropdown(categoryDropdown, categoryArrow);
+                const filterText = categoryInput.value.toLowerCase().trim();
 
-                    // Reset all items to visible for the next time they open the menu
-                    items.forEach(i => i.style.display = 'block');
+                categoryItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    item.style.display = itemText.includes(filterText) ? 'block' : 'none';
                 });
+
+                filterSkillsByCategory(); // Trigger skill filter as they type
+            });
+
+            categoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    categoryInput.value = item.textContent;
+                    closeDropdown(categoryDropdown, categoryArrow);
+                    categoryItems.forEach(i => i.style.display = 'block');
+
+                    filterSkillsByCategory(); // Trigger skill filter on click
+                });
+            });
+
+            // --- 6. Name Input Events ---
+            nameInput.addEventListener('focus', () => openDropdown(nameDropdown, nameArrow));
+
+            nameInput.addEventListener('input', function() {
+                openDropdown(nameDropdown, nameArrow);
+                const filterText = nameInput.value.toLowerCase().trim();
+
+                nameItems.forEach(item => {
+                    // FIX: Don't show the skill if the category filter already hid it
+                    if (item.classList.contains('category-hidden')) return;
+
+                    const itemText = item.textContent.toLowerCase();
+                    item.style.display = itemText.includes(filterText) ? 'block' : 'none';
+                });
+            });
+
+            nameItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    nameInput.value = item.textContent;
+                    closeDropdown(nameDropdown, nameArrow);
+
+                    // Reset visibility, but respect the category filter
+                    nameItems.forEach(i => {
+                        if (!i.classList.contains('category-hidden')) {
+                            i.style.display = 'block';
+                        }
+                    });
+                });
+            });
+
+            // --- 7. Global Click-Away Listener ---
+            document.addEventListener('click', (e) => {
+                if (!categoryInput.contains(e.target) && !categoryDropdown.contains(e.target)) {
+                    closeDropdown(categoryDropdown, categoryArrow);
+                }
+                if (!nameInput.contains(e.target) && !nameDropdown.contains(e.target)) {
+                    closeDropdown(nameDropdown, nameArrow);
+                }
             });
         });
     </script>

@@ -62,7 +62,7 @@
             <div class="inputs-card">
                 <div class="row">
                     <!-- Project Name -->
-                    <div class="col-md-6 mb-3">
+                    <div class="mb-3">
                         <label asp-for="NewProject.ProjectName" class="form-label" style="color: var(--text-secondary);">Project Name</label>
                         <div class="position-relative">
                             <input asp-for="NewProject.ProjectName" class="form-control input-with-icon" type="text" placeholder="Enter your project name" />
@@ -70,9 +70,11 @@
                             <span asp-validation-for="NewProject.ProjectName" class="field-validation-error text-danger"></span>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
                     <!-- Technologies -->
-                    <div class="col-md-6 mb-3">
+                    <div class="mb-3">
                         <label asp-for="NewProject.Technologies" class="form-label" style="color: var(--text-secondary);">Technologies</label>
                         <div class="position-relative">
                             <input asp-for="NewProject.Technologies" class="form-control input-with-icon" type="text" placeholder="Enter techs you used" />
