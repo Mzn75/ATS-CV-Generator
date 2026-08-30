@@ -19,6 +19,7 @@ namespace ATS_CV_Generator.Models
         // 1. Personal Info
         public string? FullName { get; set; }
         public string? Email { get; set; }
+        public string? Location { get; set; }
 
         public string? JobTitle { get; set; }
         public string? PhoneNumber { get; set; }
