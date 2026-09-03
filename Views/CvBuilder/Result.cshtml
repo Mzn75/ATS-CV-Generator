@@ -8,6 +8,38 @@
 
 <div class="builder-container mx-auto" style="max-width: 700px; margin-top: 40px;">
 
+    <!-- PROGRESS BAR -->
+    <div class="step-indicator" style="padding-top:20px">
+        <a asp-controller="CvBuilder" asp-action="PersonalInfo" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Personal</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Education" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Education</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Experience" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Experience</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Projects" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Projects</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Certificates" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Certificates</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Skills" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Skills</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Result" class="step active">
+            <div class="step-circle">7</div>
+            <span class="step-label">Result</span>
+        </a>
+    </div>
+
     <div class="center-h">
         <h2  style="color: #ffffff; font-weight: 700;">Your Generated CV</h2>
     </div>
@@ -20,12 +52,12 @@
         </a>
 
         <!-- Next -->
-        <button onclick="exportPDF()" name="actionType" value="next" class="btn btn-nav btn-nav-next px-5 py-2">
-            Export & Download PDF <i class="fa-solid fa-arrow-right ms-2"></i>
+        <button id="export" name="actionType" class="btn btn-nav btn-nav-next px-5 py-2">
+            Export & Download PDF <i class="fa-solid fa-download ms-2"></i>
         </button>
     </div>
 
-    <div class="cv-preview">
+    <div class="cv-preview" id="cv">
 
         <div class="cv-header">
             <p class="cv-name">@Model.FullName</p>
@@ -37,9 +69,9 @@
                 <span class="cv-sep">|</span>
                 <span class="cv-contact-item"><i class="fa-solid fa-phone"></i> <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a></span>
                 <span class="cv-sep">|</span>
-                <span class="cv-contact-item"><i class="fa-brands fa-github"></i> <a href="@Model.GitHubUrl">@Model.GitHubUrl</a></span>
+                <span class="cv-contact-item"><i class="fa-brands fa-github"></i> <a href="@Model.GitHubUrl">GitHub</a></span>
                 <span class="cv-sep">|</span>
-                <span class="cv-contact-item"><i class="fa-brands fa-linkedin"></i> <a href="@Model.LinkedInUrl">@Model.LinkedInUrl</a></span>
+                <span class="cv-contact-item"><i class="fa-brands fa-linkedin"></i> <a href="@Model.LinkedInUrl">LinkedIn</a></span>
             </p>
         </div>
 
@@ -133,19 +165,17 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-    function exportPDF() {
-        const element = document.querySelector('.cv-preview');
-        const opt = {
-            margin: 0,
-            filename: 'CV.pdf',
-            image: { type: 'jpeg', quality: 1.0 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(element).save();
-    }
+    document.getElementById("export").addEventListener("click", () => {
+        const element = document.getElementById("cv");
+        html2pdf().set({
+            margin: 10,
+            filename: 'cv.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).from(element).save();
+    });
 </script>

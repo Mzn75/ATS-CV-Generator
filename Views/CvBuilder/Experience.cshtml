@@ -6,14 +6,35 @@
 <div class="builder-container mx-auto" style="max-width: 700px; margin-top: 40px;">
 
     <!-- PROGRESS BAR -->
-    <div class="progress-wrapper mb-5">
-        <div class="d-flex justify-content-between mb-2" style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">
-            <span>PROGRESS</span>
-            <span>50%</span>
-        </div>
-        <div class="progress" style="height: 8px; background-color: #2a2b38; border-radius: 4px; overflow: hidden;">
-            <div class="progress-bar" role="progressbar" style="width: 50%; background-color: var(--secondary-teal, --accent-coral);"></div>
-        </div>
+    <div class="step-indicator" style="padding-top:20px">
+        <a asp-controller="CvBuilder" asp-action="PersonalInfo" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Personal</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Education" class="step completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Education</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Experience" class="step active">
+            <div class="step-circle">3</div>
+            <span class="step-label">Experience</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Projects" class="step">
+            <div class="step-circle">4</div>
+            <span class="step-label">Projects</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Certificates" class="step">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <span class="step-label">Certificates</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Skills" class="step">
+            <div class="step-circle">6</div>
+            <span class="step-label">Skills</span>
+        </a>
+        <a asp-controller="CvBuilder" asp-action="Result" class="step">
+            <div class="step-circle">7</div>
+            <span class="step-label">Result</span>
+        </a>
     </div>
 
     <h2 class="mb-4" style="color: #ffffff; font-weight: 700;">3. Experiences</h2>
