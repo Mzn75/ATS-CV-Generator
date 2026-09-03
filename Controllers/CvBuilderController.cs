@@ -61,6 +61,8 @@ namespace ATS_CV_Generator.Controllers
                 existingDraft.JobTitle = model.JobTitle;
                 existingDraft.Country = model.Country;
                 existingDraft.City = model.City;
+                existingDraft.GitHubUrl = model.GitHubUrl;
+                existingDraft.LinkedInUrl = model.LinkedInUrl;
                 existingDraft.ProfessionalSummary = model.ProfessionalSummary;
                 existingDraft.LastModified = System.DateTime.Now;
             }
