@@ -778,7 +778,7 @@ input[type="password"]::-ms-clear {
     border-radius: 20px;
     font-size: 0.9rem;
     line-height: 1;
-    white-space: nowrap;
+    max-width:100%;
 }
 
 .skill-badge-category {
