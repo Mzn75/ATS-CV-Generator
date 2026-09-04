@@ -950,13 +950,42 @@ input[type="password"]::-ms-clear {
 }
 
 .dev-by {
-    text-align: center;
-    padding: 10px;
-    margin-top:20px;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    font-size: 14px;
+    bottom: 12px;
+    right: 16px;
+    padding: 6px 12px;
+    font-size: 13px;
     color: var(--secondary-teal);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    z-index: 100;
+    cursor:pointer;
+    pointer-events:none;
+}
+    .dev-by a {
+        color: #FFFFFF !important;
+        text-decoration: none;
+    }
+
+        .dev-by a:hover {
+            text-decoration: underline;
+            color: var(--secondary-teal) !important;
+        }
+
+@media (max-width: 576px) {
+    .dev-by {
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+        .dev-by a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+            .dev-by a:hover {
+                text-decoration: underline;
+                color: var(--secondary-teal);
+            }
 }
