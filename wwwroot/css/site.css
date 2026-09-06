@@ -966,7 +966,6 @@ input[type="password"]::-ms-clear {
     border-radius: 6px;
     z-index: 100;
     cursor:pointer;
-    pointer-events:none;
 }
     .dev-by a {
         color: #FFFFFF !important;
@@ -980,7 +979,7 @@ input[type="password"]::-ms-clear {
 
 @media (max-width: 576px) {
     .dev-by {
-        bottom: 10px;
+        bottom: 0px;
         right: 10px;
         font-size: 12px;
         padding: 5px 10px;

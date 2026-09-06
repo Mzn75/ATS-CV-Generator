@@ -116,10 +116,18 @@ namespace ATS_CV_Generator.Controllers
 
             // 3. Otherwise, validate the data
             ModelState.Clear();
-            TryValidateModel(model.NewEducation);
+            TryValidateModel(model.NewEducation, nameof(model.NewEducation));
+
+            System.Diagnostics.Debug.WriteLine($"GradDate value: '{model.NewEducation?.GradDate}'");
+            System.Diagnostics.Debug.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+            foreach (var err in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                System.Diagnostics.Debug.WriteLine($"Validation error: {err.ErrorMessage}");
+            }
 
             if (!ModelState.IsValid)
             {
+                draft.NewEducation = model.NewEducation;
                 return View("Education", draft);
             }
 
@@ -202,10 +210,11 @@ namespace ATS_CV_Generator.Controllers
 
             // 3. Otherwise, validate the data
             ModelState.Clear();
-            TryValidateModel(model.NewExperience);
+            TryValidateModel(model.NewExperience, nameof(model.NewExperience));
 
             if (!ModelState.IsValid)
             {
+                draft.NewExperience = model.NewExperience;
                 return View("Experience", draft);
             }
 
@@ -283,10 +292,11 @@ namespace ATS_CV_Generator.Controllers
             }
 
             ModelState.Clear();
-            TryValidateModel(model.NewProject);
+            TryValidateModel(model.NewProject, nameof(model.NewProject));
 
             if (!ModelState.IsValid)
             {
+                draft.NewProject = model.NewProject;
                 return View("Projects", draft);
             }
 
@@ -362,10 +372,11 @@ namespace ATS_CV_Generator.Controllers
             }
 
             ModelState.Clear();
-            TryValidateModel(model.NewCertificate);
+            TryValidateModel(model.NewCertificate, nameof(model.NewCertificate));
 
             if (!ModelState.IsValid)
             {
+                draft.NewCertificate = model.NewCertificate;
                 return View("Certificates", draft);
             }
 
@@ -445,7 +456,7 @@ namespace ATS_CV_Generator.Controllers
             }
 
             ModelState.Clear();
-            TryValidateModel(model.NewSkill);
+            TryValidateModel(model.NewSkill, nameof(model.NewSkill));
 
             if (!ModelState.IsValid)
             {
@@ -453,6 +464,7 @@ namespace ATS_CV_Generator.Controllers
                     .OrderBy(s => s.Name)
                     .ToListAsync();
 
+                draft.NewSkill = model.NewSkill;
                 return View("Skills", draft);
             }
 
