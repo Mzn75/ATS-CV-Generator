@@ -510,6 +510,7 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
+        // 8. Export PDF Function
         [HttpGet]
         public async Task<IActionResult> ExportPdf()
         {
@@ -549,7 +550,7 @@ namespace ATS_CV_Generator.Controllers
             return File(pdfBytes, "application/pdf", "CV.pdf");
         }
 
-        // 8. Export View
+        // 8. Export View "Not Available for users"
         [HttpGet]
         public async Task<IActionResult> ExportView()
         {
@@ -564,6 +565,38 @@ namespace ATS_CV_Generator.Controllers
                 .FirstOrDefaultAsync(d => d.UserId == user.Id);
 
             return View(draft);
+        }
+
+
+        // 9. New CV - Clears the current draft and starts a new one
+        [HttpGet]
+        public async Task<IActionResult> NewCv()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
+
+            var existingDraft = await _context.CvDrafts
+                .Include(d => d.Educations)
+                .Include(d => d.Experiences)
+                .Include(d => d.Projects)
+                .Include(d => d.Certificates)
+                .Include(d => d.Skills)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            if (existingDraft != null)
+            {
+                _context.Educations.RemoveRange(existingDraft.Educations);
+                _context.Experiences.RemoveRange(existingDraft.Experiences);
+                _context.Projects.RemoveRange(existingDraft.Projects);
+                _context.Certificates.RemoveRange(existingDraft.Certificates);
+                _context.Skills.RemoveRange(existingDraft.Skills);
+
+                _context.CvDrafts.Remove(existingDraft);
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("PersonalInfo");
         }
 
     }
