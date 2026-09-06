@@ -413,6 +413,12 @@ input[type="password"]::-ms-clear {
         box-shadow: 0 10px 30px -15px rgba(20, 163, 154, 0.4);
         transform: translateY(-5px);
     }
+    .dashboard-card:disabled,
+    .dashboard-card[disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
 /* The Circle Around the Icon */
 .card-icon-wrapper {
@@ -989,3 +995,58 @@ input[type="password"]::-ms-clear {
                 color: var(--secondary-teal);
             }
 }
+
+.my-swal-popup {
+    background-color: #16171d !important;
+    border: 1px solid #38546d !important;
+    border-radius: 12px !important;
+    font-family: inherit;
+}
+
+.my-swal-title {
+    color: #F8F9FB !important;
+    font-weight: 700 !important;
+}
+
+.my-swal-text {
+    color: #94A3B8 !important;
+}
+
+.my-swal-icon {
+    border-color: #14a39a !important;
+    color: #14a39a !important;
+}
+
+.my-swal-confirm {
+    background-color: transparent !important;
+    color: #fff !important;
+    border: 1px solid #E76F51 !important;
+    border-radius: 8px !important;
+    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    margin: 0 8px !important;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+    .my-swal-confirm:hover {
+        background-color: #E76F51 !important;
+        box-shadow: 0 10px 30px -15px rgba(231, 111, 81, 0.4);
+        transform: translateY(-2px);
+    }
+
+.my-swal-cancel {
+    background-color: transparent !important;
+    color: #94A3B8 !important;
+    border: 1px solid #38546d !important;
+    border-radius: 8px !important;
+    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    margin: 0 8px !important;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+    .my-swal-cancel:hover {
+        border-color: #14a39a !important;
+        box-shadow: 0 10px 30px -15px rgba(20, 163, 154, 0.4);
+        transform: translateY(-2px);
+    }

@@ -1,4 +1,4 @@
-﻿@model ApplicationUser
+﻿@model IndexViewModel
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -7,7 +7,7 @@
     <div class="dashboard-top-nav">
         <div class="user-greeting">
             <i class="fa-solid fa-circle-user"></i>
-            <span>@Model?.FullName</span>
+            <span>@Model?.User.FullName</span>
         </div>
 
         <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
@@ -31,7 +31,7 @@
     <div class="dashboard-grid">
 
         <!-- CARD 1: Create New CV -->
-        <a asp-controller="CvBuilder" asp-action="PersonalInfo" class="dashboard-card">
+        <a asp-controller="CvBuilder" asp-action="PersonalInfo" class="dashboard-card" id="newCvBtn" data-has-draft="@Model.HasDraft.ToString().ToLower()">
             <div class="card-icon-wrapper">
                 <i class="fa-solid fa-plus card-icon"></i>
             </div>
@@ -40,15 +40,65 @@
         </a>
 
         <!-- CARD 2: Resume Draft -->
-        <a href="/CvBuilder/PersonalInfo?id=1" class="dashboard-card">
-            <div class="card-icon-wrapper">
-                <i class="fa-solid fa-file-pen card-icon"></i>
-            </div>
-            <h5 class="card-title">Edit CV</h5>
-            <p class="card-text">Continue working on your existing CV draft.</p>
-            <span class="draft-badge">In Progress</span>
-        </a>
-
+        @if (Model.HasDraft)
+        {
+            <a href="/CvBuilder/PersonalInfo/1" class="dashboard-card">
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-file-pen card-icon"></i>
+                </div>
+                <h5 class="card-title">Edit CV</h5>
+                <p class="card-text">Continue working on your existing CV draft.</p>
+                <span class="draft-badge">In Progress</span>
+            </a>
+        }
+        else
+        {
+            <button class="dashboard-card" disabled>
+                <div class="card-icon-wrapper">
+                    <i class="fa-solid fa-file-pen card-icon"></i>
+                </div>
+                <h5 class="card-title">Edit CV</h5>
+                <p class="card-text">Continue working on your existing CV draft.</p>
+                <span class="draft-badge">In Progress</span>
+            </button>
+        }
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('newCvBtn');
+
+        if (!btn) return;
+
+        btn.addEventListener('click', function(e) {
+            const hasDraft = this.dataset.hasDraft === 'true';
+            const targetUrl = this.getAttribute('href');
+
+            if (hasDraft) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Start a new CV?',
+                    text: 'You already have a saved draft. Starting a new CV will permanently delete it.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete and start new',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true,
+                    background: '#0B111A',
+                    customClass: {
+                        popup: 'my-swal-popup',
+                        title: 'my-swal-title',
+                        htmlContainer: 'my-swal-text',
+                        confirmButton: 'my-swal-confirm',
+                        cancelButton: 'my-swal-cancel',
+                        icon: 'my-swal-icon'
+                    },
+                    buttonsStyling: false
+                });
+            }
+        });
+    });
+</script>
 
