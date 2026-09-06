@@ -2,6 +2,7 @@ using ATS_CV_Generator.Data;
 using ATS_CV_Generator.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PuppeteerSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
+
+var browserFetcher = new BrowserFetcher();
+await browserFetcher.DownloadAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
