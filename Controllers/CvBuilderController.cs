@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PuppeteerSharp;
 
 namespace ATS_CV_Generator.Controllers
 {
@@ -508,5 +509,62 @@ namespace ATS_CV_Generator.Controllers
 
             return View(draft);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportPdf()
+        {
+            var url = Url.Action("ExportView", "CvBuilder", null, Request.Scheme, Request.Host.Value);
+
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            await using var page = await browser.NewPageAsync();
+
+            // Forward the logged-in user's cookies so ExportView sees them as authenticated
+            var cookies = Request.Cookies.Select(c => new CookieParam
+            {
+                Name = c.Key,
+                Value = c.Value,
+                Domain = Request.Host.Host,
+                Path = "/"
+            }).ToArray();
+
+            if (cookies.Any())
+                await page.SetCookieAsync(cookies);
+
+            await page.GoToAsync(url,
+                new NavigationOptions { WaitUntil = new[] { WaitUntilNavigation.Networkidle0 } });
+
+            var pdfBytes = await page.PdfDataAsync(new PdfOptions
+            {
+                Format = PuppeteerSharp.Media.PaperFormat.A4,
+                PrintBackground = true,
+                MarginOptions = new PuppeteerSharp.Media.MarginOptions
+                {
+                    Top = "50mm",
+                    Bottom = "10mm",
+                    Left = "10mm",
+                    Right = "10mm"
+                }
+            });
+
+            return File(pdfBytes, "application/pdf", "CV.pdf");
+        }
+
+        // 8. Export View
+        [HttpGet]
+        public async Task<IActionResult> ExportView()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var draft = await _context.CvDrafts
+                .Include(d => d.Educations)
+                .Include(d => d.Experiences)
+                .Include(d => d.Projects)
+                .Include(d => d.Certificates)
+                .Include(d => d.Skills)
+                .FirstOrDefaultAsync(d => d.UserId == user.Id);
+
+            return View(draft);
+        }
+
     }
 }
