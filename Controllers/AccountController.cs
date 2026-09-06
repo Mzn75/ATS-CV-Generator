@@ -74,7 +74,7 @@ namespace ATS_CV_Generator.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Incorrect email or password.");
             }
             return View(model);
         }

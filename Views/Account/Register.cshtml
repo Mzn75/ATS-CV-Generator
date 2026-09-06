@@ -44,12 +44,20 @@
 
                     <div class="mb-3 position-relative">
                         <label asp-for="Password" class="form-label" style="color: var(--text-secondary);">Password</label>
-                        <input asp-for="Password" class="form-control input-with-icon" type="password" placeholder="Create your password" />
+                        <input asp-for="Password" id="passwordInput" class="form-control input-with-icon" type="password" placeholder="Create your password" />
                         <i class="fa-solid fa-lock custom-input-icon"></i>
                         <span class="password-toggle" id="togglePassword">
                             <i class="fa-solid fa-eye"></i>
                         </span>
                         <span asp-validation-for="Password" class="field-validation-error"></span>
+                        
+                        <ul id="passwordRules" class="password-rules">
+                            <li id="rule-length">At least 8 characters</li>
+                            <li id="rule-upper">One uppercase letter</li>
+                            <li id="rule-lower">One lowercase letter</li>
+                            <li id="rule-digit">One number</li>
+                            <li id="rule-special">One special character</li>
+                        </ul>
                     </div>
 
                     <div class="mb-4 position-relative">
@@ -72,8 +80,10 @@
                 </form>
             </div>
         </div>
+
         <div class="page-divider col-lg-2 d-none d-lg-flex"></div>
-        <div class="preview-col col-lg-5 d-none d-lg-block">
+
+        <div class="preview-col col-lg-5 d-none d-lg-block" style="margin-top:50px">
             <div class="preview-img-card">
                 <partial name="_CvPreviewCard" />
             </div>
@@ -81,7 +91,6 @@
     </div>
     <!-- MOBILE PREVIEW MODAL -->
     <div class="modal fade" id="mobilePreviewModal" tabindex="-1" aria-hidden="true">
-        <!-- modal-dialog-scrollable makes sure they can scroll if the CV is really tall -->
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content" style="background-color: var(--surface-dark); border: 1px solid #38546d;">
 
@@ -92,7 +101,6 @@
                 </div>
 
                 <div class="modal-body">
-                    <!-- We just reuse your exact same partial view! -->
                     <partial name="_CvPreviewCard" />
                 </div>
 
@@ -113,31 +121,23 @@
                 var $btn = $(this);
                 var $form = $btn.closest("form");
 
-                // Wake up ASP.NET validation just in case
                 $form.removeData("validator").removeData("unobtrusiveValidation");
                 $.validator.unobtrusive.parse($form);
 
-                // Check if the form is valid
                 if (!$form.valid()) {
-                    // Trigger the Red 'X'
                     $btn.addClass("error-state");
-
                     setTimeout(function() {
                         $btn.removeClass("error-state");
                     }, 2000);
-
-                    return; // Stop animation
+                    return;
                 }
 
-                // If valid, run the success animation
                 $btn.addClass("onclic");
-
                 setTimeout(function() {
                     $btn.removeClass("onclic").addClass("validate");
-
                     setTimeout(function() {
                         $btn.removeClass("validate");
-                        $form.submit(); // Submit to Register method
+                        $form.submit();
                     }, 1250);
                 }, 2000);
             });
@@ -146,15 +146,13 @@
         // Password Toggle "Eye Icon"
         $(document).ready(function() {
             $("#togglePassword").on("click", function() {
-                var $input = $("#Password");
+                var $input = $("#passwordInput");
                 var $icon = $(this).find("i");
 
                 if ($input.attr("type") === "password") {
-                    // Show password and change icon to 'slash'
                     $input.attr("type", "text");
                     $icon.removeClass("fa-eye").addClass("fa-eye-slash");
                 } else {
-                    // Hide password and change icon back to 'eye'
                     $input.attr("type", "password");
                     $icon.removeClass("fa-eye-slash").addClass("fa-eye");
                 }
@@ -168,15 +166,30 @@
                 var $icon = $(this).find("i");
 
                 if ($input.attr("type") === "password") {
-                    // Show password and change icon to 'slash'
                     $input.attr("type", "text");
                     $icon.removeClass("fa-eye").addClass("fa-eye-slash");
                 } else {
-                    // Hide password and change icon back to 'eye'
                     $input.attr("type", "password");
                     $icon.removeClass("fa-eye-slash").addClass("fa-eye");
                 }
             });
+        });
+
+        // Live Password Strength Checklist
+        $(document).ready(function() {
+            $("#Password").on("input", function() {
+                const val = $(this).val();
+
+                toggleRule('rule-length', val.length >= 8);
+                toggleRule('rule-upper', /[A-Z]/.test(val));
+                toggleRule('rule-lower', /[a-z]/.test(val));
+                toggleRule('rule-digit', /[0-9]/.test(val));
+                toggleRule('rule-special', /[^A-Za-z0-9]/.test(val));
+            });
+
+            function toggleRule(id, isValid) {
+                $("#" + id).toggleClass("valid", isValid);
+            }
         });
     </script>
 }
