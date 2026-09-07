@@ -1,7 +1,7 @@
 ﻿# 1. Base runtime image (includes Puppeteer Linux dependencies)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 5101
 
 RUN apt-get update && apt-get install -y \
     wget gnupg2 apt-transport-https ca-certificates \
