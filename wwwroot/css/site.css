@@ -184,7 +184,7 @@ h1 {
         color: var(--surface-white);
     }
 
-/* Animated Button CSS */
+/* Animated Button for login */
 .btn-animate {
     width: 130px;
     height: 40px;

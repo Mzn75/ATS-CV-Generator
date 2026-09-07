@@ -61,39 +61,39 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        // Sign Up Button Animations
         $(document).ready(function() {
-            $("#animatedSaveBtn").on("click", function(e) {
+            var $btn = $("#animatedSaveBtn");
+
+            // If the page reloaded with a server-side login error (wrong email/password), trigger the red X animation immediately on load
+            if ($(".validation-summary-errors li").length > 0) {
+                $btn.addClass("error-state");
+                setTimeout(function() {
+                    $btn.removeClass("error-state");
+                }, 2000);
+            }
+
+            $btn.on("click", function(e) {
                 e.preventDefault();
 
-                var $btn = $(this);
-                var $form = $btn.closest("form");
+                var $form = $(this).closest("form");
 
-                // Wake up ASP.NET validation just in case
                 $form.removeData("validator").removeData("unobtrusiveValidation");
                 $.validator.unobtrusive.parse($form);
 
-                // Check if the form is valid
                 if (!$form.valid()) {
-                    // Trigger the Red 'X'
                     $btn.addClass("error-state");
-
                     setTimeout(function() {
                         $btn.removeClass("error-state");
                     }, 2000);
-
-                    return; // Stop animation
+                    return;
                 }
 
-                // If valid, run the success animation
                 $btn.addClass("onclic");
-
                 setTimeout(function() {
                     $btn.removeClass("onclic").addClass("validate");
-
                     setTimeout(function() {
                         $btn.removeClass("validate");
-                        $form.submit(); // Submit to Register method
+                        $form.submit();
                     }, 1250);
                 }, 2000);
             });
@@ -106,11 +106,9 @@
                 var $icon = $(this).find("i");
 
                 if ($input.attr("type") === "password") {
-                    // Show password and change icon to 'slash'
                     $input.attr("type", "text");
                     $icon.removeClass("fa-eye").addClass("fa-eye-slash");
                 } else {
-                    // Hide password and change icon back to 'eye'
                     $input.attr("type", "password");
                     $icon.removeClass("fa-eye-slash").addClass("fa-eye");
                 }
