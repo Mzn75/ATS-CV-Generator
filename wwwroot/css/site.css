@@ -1,6 +1,9 @@
+/* ==================== Imports ==================== */
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..800&display=swap');
 
+
+/* ==================== Root Variables ==================== */
 :root {
     /* Core Palette */
     --primary-navy: #1C3B57;
@@ -22,6 +25,7 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ==================== Base Style ==================== */
 body {
     background-color: var(--page-bg);
     color: var(--text-primary);
@@ -29,7 +33,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ==================== Responsive two-column layout ==================== */
+/* ==================== Layout ==================== */
 .page-columns {
     display: flex;
     justify-content: center;
@@ -70,7 +74,7 @@ h1 {
     font-size: clamp(1.75rem, 5vw, 2.75rem);
 }
 
-/* Premium Card Design */
+/* ==================== Cards ==================== */
 .inputs-card {
     background: var(--surface-dark);
     border-radius: var(--border-radius-lg);
@@ -85,7 +89,7 @@ h1 {
         content: "";
         position: absolute;
         inset: 0;
-        padding: 2px; /* border thickness */
+        padding: 2px;
         border-radius: var(--border-radius-lg);
         background: linear-gradient(to right, var(--primary-navy), var(--secondary-teal));
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -94,7 +98,7 @@ h1 {
         pointer-events: none;
     }
 
-/* Form Inputs */
+/* ==================== Form Elements ==================== */
 .form-label {
     font-weight: 500;
     color: var(--text-secondary);
@@ -124,9 +128,8 @@ h1 {
         color: var(--text-primary)
     }
 
-.input-with-icon {
-    padding-left: 45px !important;
-}
+/* Input Icons */
+.input-with-icon { padding-left: 45px !important; }
 .custom-input-icon {
     position: absolute;
     left: 1rem;
@@ -137,15 +140,19 @@ h1 {
     pointer-events: none;
 }
 
-.form-control:hover + .custom-input-icon {
-    color: var(--secondary-teal, #14a39a);
+.form-control:hover + .custom-input-icon { color: var(--secondary-teal, #14a39a); }
+.form-control:focus + .custom-input-icon { color: var(--secondary-teal, #14a39a); }
+
+/* Validation */
+.field-validation-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 5px;
+    display: block;
 }
 
-.form-control:focus + .custom-input-icon {
-    color: var(--secondary-teal, #14a39a);
-}
-
-/* Modern Buttons */
+/* ==================== Buttons ==================== */
 .btn-modern {
     border-radius: var(--border-radius-md);
     font-weight: 600;
@@ -177,16 +184,6 @@ h1 {
         color: var(--surface-white);
     }
 
-/* Custom Red Error Text under inputs */
-.field-validation-error {
-    color: var(--error);
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-top: 5px;
-    display: block;
-}
-
-
 /* Animated Button CSS */
 .btn-animate {
     width: 130px;
@@ -213,13 +210,8 @@ h1 {
         background: var(--secondary-teal);
     }
 
-    .btn-animate:active {
-        letter-spacing: 2px;
-    }
-
-    .btn-animate:after {
-        content: attr(data-text);
-    }
+    .btn-animate:active { letter-spacing: 2px; }
+    .btn-animate:after {  content: attr(data-text); }
 
     .btn-animate.onclic {
         width: 40px !important;
@@ -233,9 +225,7 @@ h1 {
         animation: rotating 2s 0.25s linear infinite;
     }
 
-        .btn-animate.onclic:after {
-            content: "" !important;
-        }
+        .btn-animate.onclic:after { content: "" !important; }
 
         .btn-animate.onclic:hover {
             color: var(--secondary-teal);
@@ -266,39 +256,32 @@ h1 {
         .btn-animate.error-state:after {
             font-family: "Font Awesome 6 Free";
             font-weight: 900 !important;
-            content: "\f00d" !important; /* FontAwesome 'X' icon */
+            content: "\f00d" !important; /* FontAwesome x Unicode */
         }
 
 @keyframes rotating {
-    from {
-        transform: rotate(0deg);
-    }
+    from {  transform: rotate(0deg);  }
 
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-    display: none !important;
-}
+/* ==================== Password Toggle ==================== */
+input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear { display: none !important; }
 
 .password-toggle {
     float: right;
     margin-right: 15px;
-    margin-top: -35px; /* Pulls the icon up into the input box */
+    margin-top: -35px;
     position: relative;
-    z-index: 10; /* Keeps it clickable */
+    z-index: 10;
     cursor: pointer;
     color: var(--text-secondary);
     transition: all 0.3s ease;
 }
 
-    .password-toggle:hover {
-        color: var(--secondary-teal); /* Highlights in your teal color */
-    }
+    .password-toggle:hover { color: var(--secondary-teal); }
 
+/* Section Title */
 .section-title {
     color: var(--primary-navy);
     font-weight: 700;
@@ -308,6 +291,7 @@ input[type="password"]::-ms-clear {
     gap: 0.5rem;
 }
 
+/* CV Preview Card */
 .preview-img-card {
     display: flex;
     justify-content: center;
@@ -322,14 +306,15 @@ input[type="password"]::-ms-clear {
     container-type: inline-size;
 }
 
+/* Modern Checkbox "Remember Me" */
 .modern-checkbox {
     appearance: none;
     -webkit-appearance: none;
     width: 22px;
     height: 22px;
-    border: 2px solid #38546d; /* Matches your divider line */
+    border: 2px solid #38546d;
     border-radius: 6px;
-    background-color: var(--surface-dark); /* Keeps the inside dark */
+    background-color: var(--surface-dark);
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     margin: 0;
@@ -339,23 +324,18 @@ input[type="password"]::-ms-clear {
     top: -2px;
 }
 
-    /* 2. Adds a glow/color change when hovering */
-    .modern-checkbox:hover {
-        border-color: var(--secondary-teal, #14a39a);
-    }
+    .modern-checkbox:hover { border-color: var(--secondary-teal, #14a39a); }
 
-    /* 3. The exact styling when the user clicks it (Checked State) */
     .modern-checkbox:checked {
         background-color: var(--secondary-teal, #14a39a);
         border-color: var(--secondary-teal, #14a39a);
-        /* A bulletproof, inline SVG checkmark - no icons or font files needed */
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
         background-size: 14px;
         background-position: center;
         background-repeat: no-repeat;
     }
 
-/* Main Layout Container */
+/* ==================== Dashboard ==================== */
 .dashboard-container {
     max-width: 1200px;
     margin: 50px auto;
@@ -382,10 +362,6 @@ input[type="password"]::-ms-clear {
     margin: 0;
 }
 
-/* 
-   THE RESPONSIVE MAGIC
-   This single line replaces all Bootstrap row/col logic 
-*/
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -393,7 +369,6 @@ input[type="password"]::-ms-clear {
     justify-content: center;
 }
 
-/* The Main Card Container */
 .dashboard-card {
     background-color: var(--surface-dark, #16171d);
     border: 1px solid #38546d;
@@ -404,23 +379,20 @@ input[type="password"]::-ms-clear {
     align-items: center;
     text-align: center;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    text-decoration: none; /* Removes the ugly blue link underline */
+    text-decoration: none;
 }
 
-    /* Hover Physics: Floats up and glows teal */
     .dashboard-card:hover {
         border-color: var(--secondary-teal, #14a39a);
         box-shadow: 0 10px 30px -15px rgba(20, 163, 154, 0.4);
         transform: translateY(-5px);
     }
-    .dashboard-card:disabled,
-    .dashboard-card[disabled] {
+    .dashboard-card:disabled, .dashboard-card[disabled] {
         pointer-events: none;
         opacity: 0.5;
         cursor: not-allowed;
     }
 
-/* The Circle Around the Icon */
 .card-icon-wrapper {
     width: 64px;
     height: 64px;
@@ -433,22 +405,15 @@ input[type="password"]::-ms-clear {
     transition: all 0.3s ease;
 }
 
-/* Icon Circle Hover State */
-.dashboard-card:hover .card-icon-wrapper {
-    background: rgba(20, 163, 154, 0.15);
-}
+.dashboard-card:hover .card-icon-wrapper { background: rgba(20, 163, 154, 0.15); }
 
-/* The FontAwesome Icon */
 .card-icon {
     font-size: 24px;
     color: #bdbecb;
     transition: all 0.3s ease;
 }
 
-/* Icon Hover State */
-.dashboard-card:hover .card-icon {
-    color: var(--secondary-teal, #14a39a);
-}
+.dashboard-card:hover .card-icon { color: var(--secondary-teal, #14a39a); }
 
 /* Typography inside the card */
 .card-title {
@@ -465,7 +430,6 @@ input[type="password"]::-ms-clear {
     margin: 0;
 }
 
-/* Custom styling for the Draft Badge */
 .draft-badge {
     background-color: transparent;
     border: 1px solid #38546d;
@@ -484,7 +448,7 @@ input[type="password"]::-ms-clear {
     align-items: center;
     padding-bottom: 25px;
     margin-bottom: 40px;
-    border-bottom: 1px solid var(--secondary-teal); /* Matches your card borders */
+    border-bottom: 1px solid var(--secondary-teal);
 }
 
 /* User Greeting Styling */
@@ -514,7 +478,6 @@ input[type="password"]::-ms-clear {
     gap: 8px;
 }
 
-    /* Logout Hover Physics: Glows red to indicate an exit action */
     .logout-btn:hover {
         border-color: #ff4757;
         color: #ff4757;
@@ -544,9 +507,7 @@ input[type="password"]::-ms-clear {
     }
 
 /* ===== NAVIGATION BUTTONS ===== */
-.nav-buttons {
-    gap: 1rem; /* consistent spacing if buttons wrap on small screens */
-}
+.nav-buttons { gap: 1rem; }
 
 .btn-nav {
     position: relative;
@@ -565,7 +526,7 @@ input[type="password"]::-ms-clear {
     min-width: 180px;
 }
 
-/* ---- Back Button (Ghost / Outline style) ---- */
+/* Back Button */
 .btn-nav-back {
     background: transparent;
     color: var(--text-secondary, #b0b0b0);
@@ -582,11 +543,9 @@ input[type="password"]::-ms-clear {
         box-shadow: 0 8px 25px rgba(231, 111, 81, 0.25);
     }
 
-    .btn-nav-back:active {
-        transform: translateY(0px) scale(0.98);
-    }
+    .btn-nav-back:active { transform: translateY(0px) scale(0.98); }
 
-/* ---- Next Button (Primary Teal Gradient) ---- */
+/* Next Button */
 .btn-nav-next {
     background: linear-gradient(135deg, var(--secondary-teal, #14a39a), #0e7c75);
     color: #ffffff;
@@ -599,11 +558,8 @@ input[type="password"]::-ms-clear {
         background: linear-gradient(135deg, #1dbdb2, #0e7c75);
     }
 
-    .btn-nav-next:active {
-        transform: translateY(0px) scale(0.98);
-    }
+    .btn-nav-next:active { transform: translateY(0px) scale(0.98); }
 
-    /* ---- Glow pulse animation (subtle) ---- */
     .btn-nav-next::after {
         content: '';
         position: absolute;
@@ -615,24 +571,16 @@ input[type="password"]::-ms-clear {
         pointer-events: none;
     }
 
-    .btn-nav-next:hover::after {
-        opacity: 1;
-    }
+    .btn-nav-next:hover::after { opacity: 1; }
 
 /* ---- Icons inside buttons ---- */
-.btn-nav i {
-    transition: transform 0.3s ease;
-}
+.btn-nav i { transition: transform 0.3s ease; }
 
-.btn-nav:hover i {
-    transform: translateX(4px); /* arrow moves on hover */
-}
+     /* Move arrows on hover */
+    .btn-nav:hover i {  transform: translateX(4px); }
+    .btn-nav-back:hover i { transform: translateX(-4px); }
 
-.btn-nav-back:hover i {
-    transform: translateX(-4px); /* back arrow moves left */
-}
-
-/* ---- Responsive tweaks ---- */
+/* Responsive */
 @media (max-width: 576px) {
     .nav-buttons {
         flex-direction: column;
@@ -645,6 +593,7 @@ input[type="password"]::-ms-clear {
         width: 100%;
     }
 }
+
 /* ==================== Small-screen adjustments ==================== */
 @media (max-width: 576px) {
     .inputs-card {
@@ -661,9 +610,9 @@ input[type="password"]::-ms-clear {
     }
 }
 
-/* Container to lock everything exactly in the center of the screen */
+/* ==================== Error Page ==================== */
 .error-page-container {
-    height: 75vh; /* Takes up most of the viewport height */
+    height: 75vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -672,7 +621,6 @@ input[type="password"]::-ms-clear {
     padding: 0 20px;
 }
 
-/* The giant, glowing numbers */
 .error-code {
     font-size: 8rem;
     font-weight: 900;
@@ -680,7 +628,7 @@ input[type="password"]::-ms-clear {
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 0;
     line-height: 1;
-    text-shadow: 0 0 25px rgba(20, 163, 154, 0.3); /* Subtle teal glow */
+    text-shadow: 0 0 25px rgba(20, 163, 154, 0.3);
 }
 
 /* Typography for the headings */
@@ -701,7 +649,6 @@ input[type="password"]::-ms-clear {
     line-height: 1.6;
 }
 
-/* The return button with hover physics */
 .error-btn {
     display: inline-flex;
     align-items: center;
@@ -724,10 +671,9 @@ input[type="password"]::-ms-clear {
         transform: translateY(-3px); /* Floats up slightly on hover */
     }
 
-.toggle-header[aria-expanded="false"] .toggle-icon {
-    transform: rotate(180deg);
-}
+.toggle-header[aria-expanded="false"] .toggle-icon { transform: rotate(180deg); }
 
+/* ==================== Dropdown ==================== */
 .custom-dropdown {
     position: absolute;
     top: calc(100% + 5px);
@@ -764,16 +710,16 @@ input[type="password"]::-ms-clear {
         background: var(--navy-hover, #142A3F);
         color: var(--secondary-teal, #2A9D8F);
     }
-/* Custom Scrollbar for the dropdown */
-.custom-dropdown::-webkit-scrollbar {
-    width: 6px;
-}
 
-.custom-dropdown::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
 
+    .custom-dropdown::-webkit-scrollbar { width: 6px; }
+    .custom-dropdown::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+
+/* ==================== Badges ==================== */
 .skill-badge {
     display: inline-flex;
     align-items: center;
@@ -804,6 +750,7 @@ input[type="password"]::-ms-clear {
     font-weight: 600;
 }
 
+/* Skills remove button */
 .remove-btn {
     width: 100%;
     padding: 6px;
@@ -825,6 +772,7 @@ input[type="password"]::-ms-clear {
         color: #E63946;
     }
 
+/* ==================== Step Indicator ==================== */
 .step-indicator {
     display: flex;
     align-items: flex-start;
@@ -859,9 +807,7 @@ input[type="password"]::-ms-clear {
         transform: translateY(-50%);
     }
 
-    .step.completed:not(:last-child)::after {
-        background-color: var(--secondary-teal, #2A9D8F);
-    }
+    .step.completed:not(:last-child)::after { background-color: var(--secondary-teal, #2A9D8F); }
 
 .step-circle {
     width: 36px;
@@ -921,10 +867,9 @@ input[type="password"]::-ms-clear {
     color: #fff;
 }
 
-.step:hover .step-label {
-    color: var(--text-primary);
-}
+.step:hover .step-label { color: var(--text-primary); }
 
+/* Make step indicator responsive */
 @media (max-width: 576px) {
     .step-label {
         font-size: 0.6rem;
@@ -955,6 +900,7 @@ input[type="password"]::-ms-clear {
     }
 }
 
+/* ==================== Developed By Badge ==================== */
 .dev-by {
     position: fixed;
     bottom: 12px;
@@ -995,6 +941,7 @@ input[type="password"]::-ms-clear {
             }
 }
 
+/* ==================== SweetAlert Customization ==================== */
 .my-swal-popup {
     background-color: #16171d !important;
     border: 1px solid #38546d !important;
@@ -1007,9 +954,7 @@ input[type="password"]::-ms-clear {
     font-weight: 700 !important;
 }
 
-.my-swal-text {
-    color: #94A3B8 !important;
-}
+.my-swal-text { color: #94A3B8 !important; }
 
 .my-swal-icon {
     border-color: #14a39a !important;
@@ -1050,6 +995,7 @@ input[type="password"]::-ms-clear {
         transform: translateY(-2px);
     }
 
+/* ==================== Password Rules ==================== */
 .password-rules {
     list-style: none;
     padding-left: 0;
@@ -1061,14 +1007,6 @@ input[type="password"]::-ms-clear {
         transition: color 0.2s ease;
     }
 
-        .password-rules li.valid {
-            color: var(--secondary-teal);
-        }
-
-        .password-rules li::before {
-            content: '✕ ';
-        }
-
-        .password-rules li.valid::before {
-            content: '✓ ';
-        }
+        .password-rules li.valid { color: var(--secondary-teal); }
+        .password-rules li::before { content: '✕ '; }
+        .password-rules li.valid::before { content: '✓ '; }
