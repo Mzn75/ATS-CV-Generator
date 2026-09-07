@@ -26,8 +26,8 @@ A web application for students/job-seekers to create CVs that are clean and ATS-
 
 ## 👤 Author
  
-**Mazen Thobian**
-[Portfolio](https://mazen-thobian.tech)
+**Mazen Thobian** <br>
+🔗[Portfolio](https://mazen-thobian.tech)
  
 ---
  
