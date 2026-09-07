@@ -1,10 +1,15 @@
 ﻿using ATS_CV_Generator.Data;
 using ATS_CV_Generator.Models;
+using EggPdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
-using SelectPdf;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using HtmlPdfPlus;
 
 namespace ATS_CV_Generator.Controllers
 {
@@ -524,31 +529,23 @@ namespace ATS_CV_Generator.Controllers
 
         // 8. Export PDF Function
         [HttpGet]
-        public IActionResult ExportPdf()
+        public async Task<IActionResult> ExportPdf()
         {
             var url = Url.Action("ExportView", "CvBuilder", null, Request.Scheme, Request.Host.Value);
 
-            HtmlToPdf converter = new HtmlToPdf();
-
-            // Forward the logged-in user's cookies
+            // Copy cookies from current request
+            var handler = new HttpClientHandler();
+            handler.CookieContainer = new CookieContainer();
             foreach (var cookie in Request.Cookies)
             {
-                converter.Options.HttpCookies.Add(cookie.Key, cookie.Value);
+                handler.CookieContainer.Add(new Cookie(cookie.Key, cookie.Value, "/", Request.Host.Host));
             }
 
-            // Page layout
-            converter.Options.PdfPageSize = PdfPageSize.A4;
-            converter.Options.MarginTop = 142;
-            converter.Options.MarginBottom = 28;
-            converter.Options.MarginLeft = 28;
-            converter.Options.MarginRight = 28;
+            using var http = new HttpClient(handler);
+            var html = await http.GetStringAsync(url);
 
-            // Convert the URL
-            PdfDocument doc = converter.ConvertUrl(url);
-
-            // Save to byte array and close
-            byte[] pdfBytes = doc.Save();
-            doc.Close();
+            // Render HTML into PDF
+            byte[] pdfBytes = await HtmlToPdf.RenderAsync(html);
 
             return File(pdfBytes, "application/pdf", "CV.pdf");
         }
