@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PuppeteerSharp;
+using SelectPdf;
 
 namespace ATS_CV_Generator.Controllers
 {
@@ -524,40 +524,31 @@ namespace ATS_CV_Generator.Controllers
 
         // 8. Export PDF Function
         [HttpGet]
-        public async Task<IActionResult> ExportPdf()
+        public IActionResult ExportPdf()
         {
             var url = Url.Action("ExportView", "CvBuilder", null, Request.Scheme, Request.Host.Value);
 
-            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
-            await using var page = await browser.NewPageAsync();
+            HtmlToPdf converter = new HtmlToPdf();
 
-            // Forward the logged-in user's cookies so ExportView sees them as authenticated
-            var cookies = Request.Cookies.Select(c => new CookieParam
+            // Forward the logged-in user's cookies
+            foreach (var cookie in Request.Cookies)
             {
-                Name = c.Key,
-                Value = c.Value,
-                Domain = Request.Host.Host,
-                Path = "/"
-            }).ToArray();
+                converter.Options.HttpCookies.Add(cookie.Key, cookie.Value);
+            }
 
-            if (cookies.Any())
-                await page.SetCookieAsync(cookies);
+            // Page layout
+            converter.Options.PdfPageSize = PdfPageSize.A4;
+            converter.Options.MarginTop = 142;
+            converter.Options.MarginBottom = 28;
+            converter.Options.MarginLeft = 28;
+            converter.Options.MarginRight = 28;
 
-            await page.GoToAsync(url,
-                new NavigationOptions { WaitUntil = new[] { WaitUntilNavigation.Networkidle0 } });
+            // Convert the URL
+            PdfDocument doc = converter.ConvertUrl(url);
 
-            var pdfBytes = await page.PdfDataAsync(new PdfOptions
-            {
-                Format = PuppeteerSharp.Media.PaperFormat.A4,
-                PrintBackground = true,
-                MarginOptions = new PuppeteerSharp.Media.MarginOptions
-                {
-                    Top = "50mm",
-                    Bottom = "10mm",
-                    Left = "10mm",
-                    Right = "10mm"
-                }
-            });
+            // Save to byte array and close
+            byte[] pdfBytes = doc.Save();
+            doc.Close();
 
             return File(pdfBytes, "application/pdf", "CV.pdf");
         }
