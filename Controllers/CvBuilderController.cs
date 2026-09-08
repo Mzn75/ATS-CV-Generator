@@ -528,6 +528,7 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
+        // 8.1. Check if Font Exists for Registeration
         private static void RegisterIfExists(string path)
         {
             if (!System.IO.File.Exists(path))
@@ -538,6 +539,7 @@ namespace ATS_CV_Generator.Controllers
             QuestPDF.Drawing.FontManager.RegisterFont(stream);
         }
 
+        // 8.2. Register Fonts for PDF Generation
         public static void RegisterFonts(string webRootPath)
         {
             RegisterIfExists($"{webRootPath}/fonts/SourceSerif4-Regular.ttf");
@@ -548,7 +550,7 @@ namespace ATS_CV_Generator.Controllers
             RegisterIfExists($"{webRootPath}/fonts/fa-brands-400.ttf");
         }
 
-        // 8. Export PDF Function
+        // 8.3. Export PDF
         public async Task<IActionResult> ExportPdf()
         {
             var userId = _userManager.GetUserId(User);
@@ -814,9 +816,10 @@ namespace ATS_CV_Generator.Controllers
                 });
             }).GeneratePdf();
 
-            return File(pdfBytes, "application/pdf", $"{model.FullName}_CV.pdf");
+            return File(pdfBytes, "application/pdf", $"{model.FullName}-CV.pdf");
         }
 
+        // 8.4. Helper method to create section titles in the PDF
         private static void SectionTitle(QuestPDF.Fluent.ColumnDescriptor column, string title, string color)
         {
             column.Item().PaddingTop(14)
@@ -824,24 +827,6 @@ namespace ATS_CV_Generator.Controllers
                 .PaddingBottom(4)
                 .Text(title).FontSize(12).Bold();
         }
-
-        // 8. Export View "Not Available for users"
-        [HttpGet]
-        public async Task<IActionResult> ExportView()
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            var draft = await _context.CvDrafts
-                .Include(d => d.Educations)
-                .Include(d => d.Experiences)
-                .Include(d => d.Projects)
-                .Include(d => d.Certificates)
-                .Include(d => d.Skills)
-                .FirstOrDefaultAsync(d => d.UserId == user.Id);
-
-            return View(draft);
-        }
-
 
         // 9. New CV - Clears the current draft and starts a new one
         [HttpGet]
