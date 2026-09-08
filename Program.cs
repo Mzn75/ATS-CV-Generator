@@ -29,7 +29,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 var app = builder.Build();
 
 QuestPDF.Settings.License = LicenseType.Community;
-CvBuilderController.RegisterFonts(app.Environment.WebRootPath);
+var webRoot = app.Environment.WebRootPath;
+CvBuilderController.RegisterFonts(webRoot);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -532,12 +532,10 @@ namespace ATS_CV_Generator.Controllers
         {
             if (!System.IO.File.Exists(path))
             {
-                Console.WriteLine($"[FONT MISSING] {path}"); // <-- temp debug line
                 return;
             }
             using var stream = System.IO.File.OpenRead(path);
             QuestPDF.Drawing.FontManager.RegisterFont(stream);
-            Console.WriteLine($"[FONT LOADED] {path}");
         }
 
         public static void RegisterFonts(string webRootPath)
@@ -567,7 +565,7 @@ namespace ATS_CV_Generator.Controllers
                 return NotFound("No CV found for this user.");
 
             const string BodyFont = "Source Serif 4";
-            const string IconFontSolid = "Font Awesome 7 Free Solid";
+            const string IconFontSolid = "Font Awesome 7 Free";
             const string IconFontBrands = "Font Awesome 7 Brands";
 
             const string TextColor = "#1a1a1a";
