@@ -177,7 +177,7 @@
 
         // Live Password Strength Checklist
         $(document).ready(function() {
-            $("#Password").on("input", function() {
+            $("#passwordInput").on("input", function() {
                 const val = $(this).val();
 
                 toggleRule('rule-length', val.length >= 8);
