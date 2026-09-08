@@ -1,6 +1,5 @@
 ﻿using ATS_CV_Generator.Data;
 using ATS_CV_Generator.Models;
-using EggPdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HtmlPdfPlus;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace ATS_CV_Generator.Controllers
 {
@@ -527,27 +528,303 @@ namespace ATS_CV_Generator.Controllers
             return View(draft);
         }
 
+        private static void RegisterIfExists(string path)
+        {
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"[FONT MISSING] {path}"); // <-- temp debug line
+                return;
+            }
+            using var stream = System.IO.File.OpenRead(path);
+            QuestPDF.Drawing.FontManager.RegisterFont(stream);
+            Console.WriteLine($"[FONT LOADED] {path}");
+        }
+
+        public static void RegisterFonts(string webRootPath)
+        {
+            RegisterIfExists($"{webRootPath}/fonts/SourceSerif4-Regular.ttf");
+            RegisterIfExists($"{webRootPath}/fonts/SourceSerif4-Bold.ttf");
+            RegisterIfExists($"{webRootPath}/fonts/SourceSerif4-Italic.ttf");
+            RegisterIfExists($"{webRootPath}/fonts/SourceSerif4-BoldItalic.ttf");
+            RegisterIfExists($"{webRootPath}/fonts/fa-solid-900.ttf");
+            RegisterIfExists($"{webRootPath}/fonts/fa-brands-400.ttf");
+        }
+
         // 8. Export PDF Function
-        [HttpGet]
         public async Task<IActionResult> ExportPdf()
         {
-            var url = Url.Action("ExportView", "CvBuilder", null, Request.Scheme, Request.Host.Value);
+            var userId = _userManager.GetUserId(User);
 
-            // Copy cookies from current request
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = new CookieContainer();
-            foreach (var cookie in Request.Cookies)
+            var model = await _context.CvDrafts
+                .Include(c => c.Educations)
+                .Include(c => c.Experiences)
+                .Include(c => c.Projects)
+                .Include(c => c.Certificates)
+                .Include(c => c.Skills)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (model == null)
+                return NotFound("No CV found for this user.");
+
+            const string BodyFont = "Source Serif 4";
+            const string IconFontSolid = "Font Awesome 7 Free Solid";
+            const string IconFontBrands = "Font Awesome 7 Brands";
+
+            const string TextColor = "#1a1a1a";
+            const string SubColor = "#333333";
+            const string LinkColor = "#0000FF";
+            const string SepColor = "#999999";
+
+            byte[] pdfBytes = QuestPDF.Fluent.Document.Create(container =>
             {
-                handler.CookieContainer.Add(new Cookie(cookie.Key, cookie.Value, "/", Request.Host.Host));
-            }
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.MarginTop(35);
+                    page.MarginBottom(25);
+                    page.MarginHorizontal(40);
 
-            using var http = new HttpClient(handler);
-            var html = await http.GetStringAsync(url);
+                    page.DefaultTextStyle(x => x
+                        .FontFamily(BodyFont)
+                        .FontColor(TextColor)
+                        .LineHeight(1.4f));
 
-            // Render HTML into PDF
-            byte[] pdfBytes = await HtmlToPdf.RenderAsync(html);
+                    page.Content().Column(column =>
+                    {
+                        column.Spacing(2);
 
-            return File(pdfBytes, "application/pdf", "CV.pdf");
+                        // ============ HEADER ============
+                        column.Item().AlignCenter()
+                            .Text(model.FullName).FontSize(24).Bold();
+
+                        column.Item().PaddingTop(4).AlignCenter()
+                            .Text(model.JobTitle).FontSize(12).Bold();
+
+                        column.Item().PaddingTop(8).AlignCenter().Row(row =>
+                        {
+                            var isFirst = true;
+                            void Sep()
+                            {
+                                if (isFirst) { isFirst = false; return; }
+                                row.AutoItem().PaddingHorizontal(6)
+                                    .Text("|").FontSize(9).FontColor(SepColor);
+                            }
+
+                            Sep();
+                            row.AutoItem().Text($"{model.Country}, {model.City}")
+                                .FontSize(9).FontColor(SubColor);
+
+                            if (!string.IsNullOrWhiteSpace(model.Email))
+                            {
+                                Sep();
+                                row.AutoItem().Text(t =>
+                                {
+                                    // \uf0e0 = fa-envelope
+                                    t.Span("\uf0e0  ").FontFamily(IconFontSolid).FontSize(9).FontColor(LinkColor);
+                                    t.Hyperlink(model.Email, $"mailto:{model.Email}")
+                                        .FontSize(9).FontColor(LinkColor);
+                                });
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
+                            {
+                                Sep();
+                                row.AutoItem().Text(t =>
+                                {
+                                    // \uf095 = fa-phone
+                                    t.Span("\uf095  ").FontFamily(IconFontSolid).FontSize(9).FontColor(LinkColor);
+                                    t.Hyperlink(model.PhoneNumber, $"tel:{model.PhoneNumber}")
+                                        .FontSize(9).FontColor(LinkColor);
+                                });
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(model.GitHubUrl))
+                            {
+                                Sep();
+                                row.AutoItem().Text(t =>
+                                {
+                                    // \uf09b = fa-github
+                                    t.Span("\uf09b  ").FontFamily(IconFontBrands).FontSize(9).FontColor(LinkColor);
+                                    t.Hyperlink("GitHub", model.GitHubUrl).FontSize(9).FontColor(LinkColor);
+                                });
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(model.LinkedInUrl))
+                            {
+                                Sep();
+                                row.AutoItem().Text(t =>
+                                {
+                                    // \uf08c = fa-linkedin
+                                    t.Span("\uf08c  ").FontFamily(IconFontBrands).FontSize(9).FontColor(LinkColor);
+                                    t.Hyperlink("LinkedIn", model.LinkedInUrl).FontSize(9).FontColor(LinkColor);
+                                });
+                            }
+                        });
+
+                        // ============ SUMMARY ============
+                        if (!string.IsNullOrWhiteSpace(model.ProfessionalSummary))
+                        {
+                            SectionTitle(column, "Summary", TextColor);
+                            column.Item().PaddingTop(4)
+                                .Text(model.ProfessionalSummary).FontSize(10);
+                        }
+
+                        // ============ EDUCATION ============
+                        if (model.Educations != null && model.Educations.Any())
+                        {
+                            SectionTitle(column, "Education", TextColor);
+                            column.Item().PaddingTop(6).Column(col =>
+                            {
+                                col.Spacing(6);
+                                foreach (var edu in model.Educations)
+                                {
+                                    col.Item().Row(row =>
+                                    {
+                                        row.RelativeItem().Column(c =>
+                                        {
+                                            c.Item().Text(edu.Institution).FontSize(11).Bold();
+                                            c.Item().Text($"Major: {edu.Major}")
+                                                .FontSize(10).Italic().FontColor(SubColor);
+                                        });
+                                        row.ConstantItem(100).AlignRight().AlignMiddle()
+                                            .Text(DateTime.Parse(edu.GradDate).ToString("MMM yyyy"))
+                                            .FontSize(9.5f).FontColor(SubColor);
+                                    });
+                                }
+                            });
+                        }
+
+                        // ============ EXPERIENCE ============
+                        if (model.Experiences != null && model.Experiences.Any())
+                        {
+                            SectionTitle(column, "Experience", TextColor);
+                            column.Item().PaddingTop(6).Column(col =>
+                            {
+                                col.Spacing(8);
+                                foreach (var exp in model.Experiences)
+                                {
+                                    col.Item().Column(item =>
+                                    {
+                                        item.Item().Row(row =>
+                                        {
+                                            row.RelativeItem().Column(c =>
+                                            {
+                                                c.Item().Text(exp.JobTitle).FontSize(11).Bold();
+                                                c.Item().Text(exp.Company)
+                                                    .FontSize(10).Italic().FontColor(SubColor);
+                                            });
+                                            row.ConstantItem(140).AlignRight().AlignMiddle()
+                                                .Text($"{DateTime.Parse(exp.StartDate):MMM yyyy} \u2013 {DateTime.Parse(exp.EndDate):MMM yyyy}")
+                                                .FontSize(9.5f).FontColor(SubColor);
+                                        });
+
+                                        if (!string.IsNullOrWhiteSpace(exp.Description))
+                                        {
+                                            item.Item().PaddingTop(3).PaddingLeft(14).Text(t =>
+                                            {
+                                                t.Span("\u2022  ").FontSize(10);
+                                                t.Span(exp.Description).FontSize(10);
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        // ============ PROJECTS ============
+                        if (model.Projects != null && model.Projects.Any())
+                        {
+                            SectionTitle(column, "Projects", TextColor);
+                            column.Item().PaddingTop(6).Column(col =>
+                            {
+                                col.Spacing(8);
+                                foreach (var proj in model.Projects)
+                                {
+                                    col.Item().Column(item =>
+                                    {
+                                        item.Item().Row(row =>
+                                        {
+                                            row.RelativeItem()
+                                                .Text(proj.ProjectName).FontSize(11).Bold();
+                                            row.ConstantItem(140).AlignRight().AlignMiddle()
+                                                .Text($"{DateTime.Parse(proj.StartDate):MMM yyyy} \u2013 {DateTime.Parse(proj.EndDate):MMM yyyy}")
+                                                .FontSize(9.5f).FontColor(SubColor);
+                                        });
+
+                                        if (!string.IsNullOrWhiteSpace(proj.Description))
+                                        {
+                                            item.Item().PaddingTop(3).PaddingLeft(14).Text(t =>
+                                            {
+                                                t.Span("\u2022  ").FontSize(10);
+                                                t.Span(proj.Description).FontSize(10);
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        // ============ CERTIFICATIONS ============
+                        if (model.Certificates != null && model.Certificates.Any())
+                        {
+                            SectionTitle(column, "Certifications", TextColor);
+                            column.Item().PaddingTop(6).Column(col =>
+                            {
+                                col.Spacing(5);
+                                foreach (var cert in model.Certificates)
+                                {
+                                    col.Item().Row(row =>
+                                    {
+                                        row.RelativeItem().Text(t =>
+                                        {
+                                            t.Span(cert.Name).FontSize(11).Bold();
+                                            t.Span($" \u2013 {cert.Issuer}").FontSize(11);
+                                        });
+                                        row.ConstantItem(100).AlignRight()
+                                            .Text(DateTime.Parse(cert.IssueDate).ToString("MMM yyyy"))
+                                            .FontSize(9.5f).FontColor(SubColor);
+                                    });
+                                }
+                            });
+                        }
+
+                        // ============ SKILLS ============
+                        if (model.Skills != null && model.Skills.Any())
+                        {
+                            SectionTitle(column, "Skills", TextColor);
+                            var grouped = model.Skills
+                                .GroupBy(s => string.IsNullOrWhiteSpace(s.Category) ? "Other" : s.Category);
+
+                            column.Item().PaddingTop(6).Column(col =>
+                            {
+                                col.Spacing(4);
+                                foreach (var group in grouped)
+                                {
+                                    col.Item().Row(row =>
+                                    {
+                                        row.AutoItem().Text("\u2022  ").FontSize(10.5f);
+                                        row.RelativeItem().Text(t =>
+                                        {
+                                            t.Span($"{group.Key}: ").FontSize(10.5f).Bold();
+                                            t.Span(string.Join(", ", group.Select(s => s.Name))).FontSize(10.5f);
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            }).GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", $"{model.FullName}_CV.pdf");
+        }
+
+        private static void SectionTitle(QuestPDF.Fluent.ColumnDescriptor column, string title, string color)
+        {
+            column.Item().PaddingTop(14)
+                .BorderBottom(1).BorderColor(color)
+                .PaddingBottom(4)
+                .Text(title).FontSize(12).Bold();
         }
 
         // 8. Export View "Not Available for users"

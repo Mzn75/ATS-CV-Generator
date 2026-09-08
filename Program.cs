@@ -1,7 +1,10 @@
+using ATS_CV_Generator.Controllers;
 using ATS_CV_Generator.Data;
 using ATS_CV_Generator.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
+
+QuestPDF.Settings.License = LicenseType.Community;
+CvBuilderController.RegisterFonts(app.Environment.WebRootPath);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
