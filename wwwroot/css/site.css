@@ -31,6 +31,12 @@ body {
     color: var(--text-primary);
     font-family: 'Sora', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+
+    background-image: linear-gradient(rgba(18, 28, 41, 0.50), rgba(18, 28, 41, 0.50)), url('/images/doodles.png');
+    background-repeat: repeat;
+    background-size: 400px;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 /* ==================== Layout ==================== */
