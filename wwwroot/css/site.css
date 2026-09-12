@@ -618,13 +618,21 @@ input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear { display:
 
 /* ==================== Error Page ==================== */
 .error-page-container {
-    height: 75vh;
+    max-width: 450px;
+    width: 100%;
+    margin: 10vh auto;
+    padding: 50px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 20px;
+    background: transparent;
+    color: var(--text-secondary, #b0b0b0);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(4px);
+    box-shadow: var(--shadow-calm, 0 12px 32px rgba(0, 0, 0, 0.4));
+    border-radius: var(--border-radius-lg, 16px);
 }
 
 .error-code {

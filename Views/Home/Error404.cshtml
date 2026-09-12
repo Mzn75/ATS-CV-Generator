@@ -1,4 +1,8 @@
-﻿<div class="error-page-container">
+﻿@{
+    ViewData["Title"] = "404";
+}
+}
+<div class="error-page-container">
     <!-- The glowing 404 text -->
     <h1 class="error-code">404</h1>
 
@@ -9,7 +13,7 @@
     </p>
 
     <!-- The return button -->
-    <a asp-controller="Home" asp-action="Index" class="error-btn">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-nav btn-nav-back px-5 py-2">
         <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
     </a>
 </div>
