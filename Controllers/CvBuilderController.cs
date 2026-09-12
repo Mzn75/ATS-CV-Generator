@@ -427,15 +427,26 @@ namespace ATS_CV_Generator.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            ViewBag.StandardSkills = await _context.PreDefinedSkills
-                .OrderBy(s => s.Name)
-                .ToListAsync();
-
             var draft = await _context.CvDrafts
                 .Include(d => d.Skills)
                 .FirstOrDefaultAsync(d => d.UserId == user.Id);
 
             if (draft == null) return RedirectToAction("PersonalInfo");
+
+            // Fetch all predefined skills
+            var allStandardSkills = await _context.PreDefinedSkills
+                .OrderBy(s => s.Name)
+                .ToListAsync();
+
+            // Create a HashSet of user's existing skills
+            var userSkillNames = draft.Skills
+                .Select(s => s.Name.ToLower())
+                .ToHashSet();
+
+            // Filter out skills the user already has
+            ViewBag.StandardSkills = allStandardSkills
+                .Where(s => !userSkillNames.Contains(s.Name.ToLower()))
+                .ToList();
 
             return View(draft);
         }
@@ -464,11 +475,26 @@ namespace ATS_CV_Generator.Controllers
             ModelState.Clear();
             TryValidateModel(model.NewSkill, nameof(model.NewSkill));
 
+            // Duplicate Check: Compare incoming name against saved skills
+            if (model.NewSkill != null && !string.IsNullOrWhiteSpace(model.NewSkill.Name))
+            {
+                bool isDuplicate = draft.Skills.Any(s =>
+                    s.Name.Equals(model.NewSkill.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (isDuplicate)
+                {
+                    ModelState.AddModelError("NewSkill.Name", "You have already added this skill.");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                ViewBag.StandardSkills = await _context.PreDefinedSkills
-                    .OrderBy(s => s.Name)
-                    .ToListAsync();
+                var allStandardSkills = await _context.PreDefinedSkills.OrderBy(s => s.Name).ToListAsync();
+                var userSkillNames = draft.Skills.Select(s => s.Name.ToLower()).ToHashSet();
+
+                ViewBag.StandardSkills = allStandardSkills
+                    .Where(s => !userSkillNames.Contains(s.Name.ToLower()))
+                    .ToList();
 
                 draft.NewSkill = model.NewSkill;
                 return View("Skills", draft);
