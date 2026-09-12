@@ -24,9 +24,12 @@ A web application for students/job-seekers to create CVs that are clean and ATS-
 | Alerts / Modals | SweetAlert2 |
 | Icons / Fonts | Font Awesome, Google Fonts |
 
+## 🚀 Live Demo 
+🔗[Try the ATS CV Generator](https://your-live-link.com)
+
 ## 👤 Author
  
-**Mazen Thobian** <br>
+**Mazen Thobian**<br>
 🔗[Take a look at my Portfolio](https://mazen-thobian.tech)
  
 ---
