@@ -25,7 +25,7 @@ A web application for students/job-seekers to create CVs that are clean and ATS-
 | Icons / Fonts | Font Awesome, Google Fonts |
 
 ## 🚀 Live Demo 
-🔗[Try the ATS CV Generator](https://your-live-link.com)
+🔗[Try the ATS CV Generator](https://ats-cv-generator.runasp.net/)
 
 ## 👤 Author
  
